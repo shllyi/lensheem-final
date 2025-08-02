@@ -497,8 +497,31 @@ exports.getReviewsByItem = (req, res) => {
 
 // Admin function to get all reviews
 exports.getAllReviewsForAdmin = (req, res) => {
-  const { search, page = 1, limit = 25 } = req.query;
+  const { 
+    search, 
+    reviewId, 
+    orderId, 
+    customerSearch, 
+    itemSearch, 
+    rating, 
+    dateFrom, 
+    dateTo, 
+    status,
+    page = 1, 
+    limit = 25 
+  } = req.query;
   const offset = (page - 1) * limit;
+  
+  console.log('Admin reviews query params:', req.query);
+  
+  // Test query to see if there are any reviews at all
+  connection.query('SELECT COUNT(*) as total FROM reviews', (err, testResults) => {
+    if (err) {
+      console.error("Test query failed:", err);
+    } else {
+      console.log('Total reviews in database:', testResults[0].total);
+    }
+  });
   
   let sql = `
     SELECT 
@@ -537,9 +560,57 @@ exports.getAllReviewsForAdmin = (req, res) => {
       i.item_name LIKE ? OR 
       CONCAT(c.fname, ' ', c.lname) LIKE ? OR 
       u.email LIKE ? OR 
-      r.orderinfo_id LIKE ?
+      r.orderinfo_id LIKE ? OR
+      r.review_id LIKE ?
     )`);
-    searchParams.push(searchTerm, searchTerm, searchTerm, searchTerm, searchTerm);
+    searchParams.push(searchTerm, searchTerm, searchTerm, searchTerm, searchTerm, searchTerm);
+  }
+  
+  // Add specific search conditions
+  if (reviewId && reviewId.trim()) {
+    whereConditions.push(`r.review_id = ?`);
+    searchParams.push(reviewId.trim());
+  }
+  
+  if (orderId && orderId.trim()) {
+    whereConditions.push(`r.orderinfo_id LIKE ?`);
+    searchParams.push(`%${orderId.trim()}%`);
+  }
+  
+  if (customerSearch && customerSearch.trim()) {
+    whereConditions.push(`(
+      CONCAT(c.fname, ' ', c.lname) LIKE ? OR 
+      u.email LIKE ?
+    )`);
+    searchParams.push(`%${customerSearch.trim()}%`, `%${customerSearch.trim()}%`);
+  }
+  
+  if (itemSearch && itemSearch.trim()) {
+    whereConditions.push(`i.item_name LIKE ?`);
+    searchParams.push(`%${itemSearch.trim()}%`);
+  }
+  
+  if (rating && rating.trim()) {
+    whereConditions.push(`r.rating = ?`);
+    searchParams.push(parseInt(rating));
+  }
+  
+  if (dateFrom && dateFrom.trim()) {
+    whereConditions.push(`DATE(r.created_at) >= ?`);
+    searchParams.push(dateFrom.trim());
+  }
+  
+  if (dateTo && dateTo.trim()) {
+    whereConditions.push(`DATE(r.created_at) <= ?`);
+    searchParams.push(dateTo.trim());
+  }
+  
+  if (status && status.trim()) {
+    if (status === 'deleted') {
+      whereConditions.push(`r.deleted_at IS NOT NULL`);
+    } else if (status === 'active') {
+      whereConditions.push(`r.deleted_at IS NULL`);
+    }
   }
   
   if (whereConditions.length > 0) {
@@ -549,6 +620,10 @@ exports.getAllReviewsForAdmin = (req, res) => {
   
   sql += ` ORDER BY r.created_at DESC LIMIT ? OFFSET ?`;
   const queryParams = [...searchParams, parseInt(limit), offset];
+  
+  console.log('Final SQL:', sql);
+  console.log('Query params:', queryParams);
+  console.log('Where conditions:', whereConditions);
 
   // First get total count
   connection.query(countSql, searchParams, (err, countResults) => {
@@ -558,6 +633,7 @@ exports.getAllReviewsForAdmin = (req, res) => {
     }
 
     const totalCount = countResults[0].total;
+    console.log('Total count:', totalCount);
 
     // Then get paginated results
     connection.query(sql, queryParams, (err, results) => {

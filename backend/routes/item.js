@@ -24,8 +24,5 @@ router.put('/admin/:id', requireAdminAuth, upload.array('images', 5), itemContro
 router.delete('/admin/:id', requireAdminAuth, itemController.deleteItem);
 //restore
 router.patch('/admin/restore/:id', requireAdminAuth, itemController.restoreItem);
-router.get('/admin/all', requireAdminAuth, itemController.getAllItemsIncludingDeleted);
-
-
 
 module.exports = router;

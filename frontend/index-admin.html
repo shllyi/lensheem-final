@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Lensheem</title>
-    <link rel="stylesheet" href="admin-header.html">
+    <!-- Existing CSS links -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.16.1/sweetalert2.css">
+    <link rel="stylesheet" href="css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
+        /* Copy relevant styles from admin-orders.html */
         * {
             margin: 0;
             padding: 0;
@@ -27,14 +31,13 @@
             min-height: 100vh;
         }
 
-        /* Main Content Area */
         .admin-main {
             flex: 1;
             background: #fafafa;
             display: flex;
         }
 
-        /* Sidebar Styles */
+        /* Sidebar Styles - Copied from admin-orders.html */
         .admin-sidebar {
             width: 280px;
             background: white;
@@ -130,243 +133,64 @@
             font-weight: 500;
         }
 
-        /* Content Area */
-        .content-area {
-            flex: 1;
-            padding: 30px;
-            overflow-y: auto;
-        }
-
-        /* Dashboard Container */
+        /* Dashboard specific styles */
         .dashboard-container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
-            overflow: hidden;
-            border: 1px solid #f0f0f0;
-            margin-bottom: 30px;
-        }
-
-        .page-header {
             padding: 30px;
-            background: white;
-            border-bottom: 1px solid #f0f0f0;
+            width: 100%;
         }
 
-        .page-title {
-            font-size: 28px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .page-title i {
-            color: #ffc107;
-        }
-
-        /* Analytics Grid */
-        .analytics-grid {
+        .chart-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
             margin-bottom: 30px;
-        }
-
-        .analytics-card {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            border: 1px solid #f0f0f0;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .analytics-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(135deg, #ffc107, #ff9800);
-        }
-
-        .analytics-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(255,193,7,0.2);
-            border-color: #ffc107;
-        }
-
-        .analytics-icon {
-            font-size: 36px;
-            margin-bottom: 15px;
-            color: #ffc107;
-            text-shadow: 0 2px 10px rgba(255,193,7,0.3);
-        }
-
-        .analytics-number {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #333;
-        }
-
-        .analytics-label {
-            font-size: 13px;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 600;
-        }
-
-        .analytics-change {
-            font-size: 12px;
-            margin-top: 5px;
-            font-weight: 500;
-        }
-
-        .change-positive {
-            color: #27ae60;
-        }
-
-        .change-negative {
-            color: #e74c3c;
-        }
-
-        /* Charts Grid */
-        .charts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-            gap: 30px;
         }
 
         .chart-card {
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
-            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border: 1px solid #f0f0f0;
-            transition: all 0.3s ease;
-        }
-
-        .chart-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 35px rgba(0,0,0,0.12);
+            overflow: hidden;
         }
 
         .chart-header {
-            background: linear-gradient(135deg, #fff9c4, #fff59d);
-            padding: 20px 25px;
-            border-bottom: 1px solid #ffe082;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #f0f0f0;
         }
 
         .chart-title {
             font-size: 18px;
             font-weight: 600;
             color: #333;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .chart-title i {
-            color: #ffc107;
-        }
-
-        .chart-period {
-            font-size: 12px;
-            color: #666;
-            background: white;
-            padding: 5px 10px;
-            border-radius: 15px;
-            border: 1px solid #ffe082;
+            margin: 0;
         }
 
         .chart-body {
-            padding: 25px;
-            height: 350px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            padding: 20px;
         }
 
-        .chart-canvas {
+        canvas {
             width: 100% !important;
-            height: 100% !important;
+            height: 300px !important;
         }
 
-        /* Welcome Section */
-        .welcome-section {
-            background: linear-gradient(135deg, #ffc107, #ff9800);
-            color: white;
+        /* Page Header */
+        .page-header {
             padding: 30px;
+            background: white;
+            border-bottom: 1px solid #f0f0f0;
             border-radius: 15px;
             margin-bottom: 30px;
-            box-shadow: 0 8px 25px rgba(255,193,7,0.3);
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
         }
 
-        .welcome-title {
-            font-size: 24px;
+        .page-title {
+            font-size: 28px;
             font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .welcome-subtitle {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-
-        .welcome-stats {
-            display: flex;
-            gap: 30px;
-            margin-top: 20px;
-        }
-
-        .welcome-stat {
-            text-align: center;
-        }
-
-        .welcome-stat-number {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .welcome-stat-label {
-            font-size: 12px;
-            opacity: 0.8;
-        }
-
-        /* Loading States */
-        .loading-spinner {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 200px;
-            color: #666;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f0f0f0;
-            border-top: 4px solid #ffc107;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 15px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            color: #333;
+            margin: 0;
         }
 
         /* Responsive Design */
@@ -392,38 +216,19 @@
                 padding: 15px 10px;
             }
 
-            .content-area {
-                padding: 20px 15px;
-            }
-
-            .analytics-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
-            }
-
-            .charts-grid {
+            .chart-grid {
                 grid-template-columns: 1fr;
-                gap: 20px;
-            }
-
-            .chart-card {
-                min-width: unset;
-            }
-
-            .welcome-stats {
-                flex-direction: column;
-                gap: 15px;
             }
         }
     </style>
 </head>
 <body>
     <div class="admin-container">
+        <!-- Include admin header -->
         <iframe src="admin-header.html" style="width:100%;height:90px;border:none;" title="Admin Header"></iframe>
 
-        <!-- Main Content Area -->
         <div class="admin-main">
-            <!-- Sidebar -->
+            <!-- Sidebar - Copied from admin-orders.html -->
             <div class="admin-sidebar">
                 <div class="admin-logo">
                     <div class="admin-logo-icon">A</div>
@@ -453,9 +258,13 @@
                             <i class="fas fa-star"></i>
                             <span class="sidebar-nav-item-text">Reviews</span>
                         </a>
-                        <a href="admin-analytics.html" class="sidebar-nav-item">
-                            <i class="fas fa-chart-line"></i>
-                            <span class="sidebar-nav-item-text">Analytics</span>
+                        <a href="category.html" class="sidebar-nav-item">
+                            <i class="fas fa-list"></i>
+                            <span class="sidebar-nav-item-text">Categories</span>
+                        </a>
+                        <a href="item.html" class="sidebar-nav-item">
+                            <i class="fas fa-box"></i>
+                            <span class="sidebar-nav-item-text">Items</span>
                         </a>
                     </div>
 
@@ -473,604 +282,227 @@
                 </nav>
             </div>
 
-            <!-- Content Area -->
-            <div class="content-area">
-                <!-- Welcome Section -->
-                <div class="welcome-section">
-                    <div class="welcome-title">Welcome back, Admin!</div>
-                    <div class="welcome-subtitle">Here's what's happening with your store today</div>
-                    <div class="welcome-stats">
-                        <div class="welcome-stat">
-                            <div class="welcome-stat-number" id="todayOrders">0</div>
-                            <div class="welcome-stat-label">Today's Orders</div>
-                        </div>
-                        <div class="welcome-stat">
-                            <div class="welcome-stat-number" id="todayRevenue">₱0</div>
-                            <div class="welcome-stat-label">Today's Revenue</div>
-                        </div>
-                        <div class="welcome-stat">
-                            <div class="welcome-stat-number" id="newCustomers">0</div>
-                            <div class="welcome-stat-label">New Customers</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Dashboard Container -->
-                <div class="dashboard-container">
-                    <!-- Page Header -->
-                    <div class="page-header">
-                        <h1 class="page-title">
-                            <i class="fas fa-chart-pie"></i>
-                            Analytics Dashboard
-                        </h1>
-                        
-                        <div class="analytics-grid">
-                            <div class="analytics-card">
-                                <div class="analytics-icon">👥</div>
-                                <div class="analytics-number" id="totalUsers">0</div>
-                                <div class="analytics-label">Total Users</div>
-                                <div class="analytics-change change-positive" id="usersChange">+0% this month</div>
-                            </div>
-                            <div class="analytics-card">
-                                <div class="analytics-icon">📦</div>
-                                <div class="analytics-number" id="totalOrders">0</div>
-                                <div class="analytics-label">Total Orders</div>
-                                <div class="analytics-change change-positive" id="ordersChange">+0% this month</div>
-                            </div>
-                            <div class="analytics-card">
-                                <div class="analytics-icon">🛍️</div>
-                                <div class="analytics-number" id="totalItems">0</div>
-                                <div class="analytics-label">Items Sold</div>
-                                <div class="analytics-change change-positive" id="itemsChange">+0% this month</div>
-                            </div>
-                            <div class="analytics-card">
-                                <div class="analytics-icon">💰</div>
-                                <div class="analytics-number" id="totalRevenue">₱0</div>
-                                <div class="analytics-label">Total Revenue</div>
-                                <div class="analytics-change change-positive" id="revenueChange">+0% this month</div>
-                            </div>
-                            <div class="analytics-card">
-                                <div class="analytics-icon">⭐</div>
-                                <div class="analytics-number" id="avgRating">0.0</div>
-                                <div class="analytics-label">Average Rating</div>
-                                <div class="analytics-change change-positive" id="ratingChange">Based on reviews</div>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Dashboard Content -->
+            <div class="dashboard-container">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1 class="page-title">Dashboard Overview</h1>
                 </div>
 
                 <!-- Charts Grid -->
-                <div class="charts-grid">
-                    <!-- Sales Chart -->
+                <div class="chart-grid">
                     <div class="chart-card">
                         <div class="chart-header">
-                            <div class="chart-title">
-                                <i class="fas fa-chart-line"></i>
-                                Monthly Sales Trend
-                            </div>
-                            <div class="chart-period">Last 12 Months</div>
+                            <h3 class="chart-title">Customers by Town</h3>
                         </div>
                         <div class="chart-body">
-                            <canvas id="salesChart" class="chart-canvas"></canvas>
+                            <canvas id="addressChart"></canvas>
                         </div>
                     </div>
-
-                    <!-- Users by Location Chart -->
                     <div class="chart-card">
                         <div class="chart-header">
-                            <div class="chart-title">
-                                <i class="fas fa-map-marker-alt"></i>
-                                Customers by Location
-                            </div>
-                            <div class="chart-period">Current Data</div>
+                            <h3 class="chart-title">Monthly Sales</h3>
                         </div>
                         <div class="chart-body">
-                            <canvas id="addressChart" class="chart-canvas"></canvas>
+                            <canvas id="salesChart"></canvas>
                         </div>
                     </div>
-
-                    <!-- Items Distribution Chart -->
                     <div class="chart-card">
                         <div class="chart-header">
-                            <div class="chart-title">
-                                <i class="fas fa-shopping-bag"></i>
-                                Items Sold Distribution
-                            </div>
-                            <div class="chart-period">This Month</div>
+                            <h3 class="chart-title">Items Sold Distribution</h3>
                         </div>
                         <div class="chart-body">
-                            <canvas id="itemsChart" class="chart-canvas"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Order Status Chart -->
-                    <div class="chart-card">
-                        <div class="chart-header">
-                            <div class="chart-title">
-                                <i class="fas fa-tasks"></i>
-                                Order Status Distribution
-                            </div>
-                            <div class="chart-period">Current Orders</div>
-                        </div>
-                        <div class="chart-body">
-                            <canvas id="orderStatusChart" class="chart-canvas"></canvas>
+                            <canvas id="itemsChart"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Footer -->
-        <iframe src="footer_admin.html" style="width:100%;height:80px;border:none;" title="Admin Footer"></iframe>
+        <!-- Include admin footer -->
+        <iframe src="footer_admin.html" style="width:100%;border:none;" title="Admin Footer"></iframe>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Existing Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="assets/js/index-admin.js"></script>
+
     <script>
-        // Global variables
-        let currentUser = null;
-        const API_BASE_URL = '/api';
-
-        // Chart configurations
-        const chartOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        padding: 20,
-                        usePointStyle: true,
-                        font: {
-                            size: 12
-                        }
-                    }
-                }
-            }
-        };
-
-        // Initialize dashboard
-        document.addEventListener('DOMContentLoaded', function() {
-            checkAuth();
-            loadDashboardData();
-            initializeCharts();
-        });
-
-        // Check authentication
-        async function checkAuth() {
+        async function createAddressChart(data) {
+            const ctx = document.getElementById('addressChart').getContext('2d');
             try {
-                const token = localStorage.getItem('token');
-                if (!token) {
-                    redirectToLogin();
-                    return;
-                }
-
-                const response = await fetch(`${API_BASE_URL}/auth/admin-check`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                if (!response.ok) {
-                    localStorage.removeItem('token');
-                    redirectToLogin();
-                    return;
-                }
-
-                const data = await response.json();
-                if (!data.success) {
-                    redirectToLogin();
-                }
-            } catch (error) {
-                console.error('Auth check failed:', error);
-                redirectToLogin();
-            }
-        }
-
-        function redirectToLogin() {
-            window.location.href = '/login.html';
-        }
-
-        // Load dashboard data
-        async function loadDashboardData() {
-            const token = localStorage.getItem('token');
-            if (!token) return;
-
-            try {
-                // Load analytics data
-                const [usersRes, ordersRes, itemsRes] = await Promise.all([
-                    fetch('/api/analytics/users', { headers: { 'Authorization': `Bearer ${token}` } }),
-                    fetch('/api/analytics/orders', { headers: { 'Authorization': `Bearer ${token}` } }),
-                    fetch('/api/analytics/items', { headers: { 'Authorization': `Bearer ${token}` } })
-                ]);
-
-                if (usersRes.ok) {
-                    const usersData = await usersRes.json();
-                    updateUsersAnalytics(usersData);
-                }
-
-                if (ordersRes.ok) {
-                    const ordersData = await ordersRes.json();
-                    updateOrdersAnalytics(ordersData);
-                }
-
-                if (itemsRes.ok) {
-                    const itemsData = await itemsRes.json();
-                    updateItemsAnalytics(itemsData);
-                }
-
-                // Load chart data
-                await loadChartData();
-
-            } catch (error) {
-                console.error('Failed to load dashboard data:', error);
-                showNotification('Failed to load dashboard data', 'error');
-            }
-        }
-
-        // Update analytics displays
-        function updateUsersAnalytics(data) {
-            if (data.success) {
-                document.getElementById('totalUsers').textContent = data.totalUsers || 0;
-                document.getElementById('newCustomers').textContent = data.newUsersToday || 0;
+                const response = await fetch('/api/admin/address-chart');
+                const result = await response.json();
                 
-                const change = data.monthlyChange || 0;
-                const changeElement = document.getElementById('usersChange');
-                changeElement.textContent = `${change > 0 ? '+' : ''}${change}% this month`;
-                changeElement.className = `analytics-change ${change >= 0 ? 'change-positive' : 'change-negative'}`;
-            }
-        }
-
-        function updateOrdersAnalytics(data) {
-            if (data.success) {
-                document.getElementById('totalOrders').textContent = data.totalOrders || 0;
-                document.getElementById('todayOrders').textContent = data.todayOrders || 0;
-                document.getElementById('totalRevenue').textContent = `₱${(data.totalRevenue || 0).toFixed(2)}`;
-                document.getElementById('todayRevenue').textContent = `₱${(data.todayRevenue || 0).toFixed(2)}`;
-                
-                const change = data.monthlyChange || 0;
-                const changeElement = document.getElementById('ordersChange');
-                changeElement.textContent = `${change > 0 ? '+' : ''}${change}% this month`;
-                changeElement.className = `analytics-change ${change >= 0 ? 'change-positive' : 'change-negative'}`;
-
-                const revenueChange = data.revenueChange || 0;
-                const revenueChangeElement = document.getElementById('revenueChange');
-                revenueChangeElement.textContent = `${revenueChange > 0 ? '+' : ''}${revenueChange}% this month`;
-                revenueChangeElement.className = `analytics-change ${revenueChange >= 0 ? 'change-positive' : 'change-negative'}`;
-            }
-        }
-
-        function updateItemsAnalytics(data) {
-            if (data.success) {
-                document.getElementById('totalItems').textContent = data.totalItemsSold || 0;
-                document.getElementById('avgRating').textContent = (data.averageRating || 0).toFixed(1);
-                
-                const change = data.monthlyChange || 0;
-                const changeElement = document.getElementById('itemsChange');
-                changeElement.textContent = `${change > 0 ? '+' : ''}${change}% this month`;
-                changeElement.className = `analytics-change ${change >= 0 ? 'change-positive' : 'change-negative'}`;
-            }
-        }
-
-        // Initialize charts
-        function initializeCharts() {
-            // Show loading state for all charts
-            showChartLoading('salesChart');
-            showChartLoading('addressChart');
-            showChartLoading('itemsChart');
-            showChartLoading('orderStatusChart');
-        }
-
-        function showChartLoading(canvasId) {
-            const canvas = document.getElementById(canvasId);
-            const ctx = canvas.getContext('2d');
-            
-            // Clear canvas and show loading
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#666';
-            ctx.font = '16px Segoe UI';
-            ctx.textAlign = 'center';
-            ctx.fillText('Loading chart data...', canvas.width / 2, canvas.height / 2);
-        }
-
-        // Load chart data
-        async function loadChartData() {
-            const token = localStorage.getItem('token');
-            
-            try {
-                // Sales Chart
-                const salesResponse = await fetch('/api/analytics/sales-trend', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                
-                if (salesResponse.ok) {
-                    const salesData = await salesResponse.json();
-                    createSalesChart(salesData);
-                }
-
-                // Address Chart
-                const addressResponse = await fetch('/api/analytics/users-by-location', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                
-                if (addressResponse.ok) {
-                    const addressData = await addressResponse.json();
-                    createAddressChart(addressData);
-                }
-
-                // Items Chart
-                const itemsResponse = await fetch('/api/analytics/items-distribution', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                
-                if (itemsResponse.ok) {
-                    const itemsData = await itemsResponse.json();
-                    createItemsChart(itemsData);
-                }
-
-                // Order Status Chart
-                const statusResponse = await fetch('/api/analytics/order-status', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                
-                if (statusResponse.ok) {
-                    const statusData = await statusResponse.json();
-                    createOrderStatusChart(statusData);
-                }
-
-            } catch (error) {
-                console.error('Failed to load chart data:', error);
-            }
-        }
-
-        // Create charts
-        function createSalesChart(data) {
-            const ctx = document.getElementById('salesChart').getContext('2d');
-            
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: data.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                    datasets: [{
-                        label: 'Monthly Sales',
-                        data: data.values || [10000, 15000, 12000, 18000, 22000, 25000],
-                        borderColor: '#ffc107',
-                        backgroundColor: 'rgba(255, 193, 7, 0.1)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4,
-                        pointBackgroundColor: '#ffc107',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        pointRadius: 6
-                    }]
-                },
-                options: {
-                    ...chartOptions,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return '₱' + value.toLocaleString();
+                const chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: result.rows.map(row => row.addressline),
+                        datasets: [{
+                            label: 'Customers per Town',
+                            data: result.rows.map(row => row.total),
+                            backgroundColor: 'rgba(255, 193, 7, 0.8)',
+                            borderColor: '#ffc107',
+                            borderWidth: 2,
+                            borderRadius: 5,
+                            barPercentage: 0.6,
+                            categoryPercentage: 0.8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                labels: {
+                                    font: {
+                                        size: 12,
+                                        family: "'Segoe UI', sans-serif"
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.05)'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
                                 }
                             }
                         }
                     }
-                }
-            });
+                });
+            } catch (error) {
+                console.error('Error creating address chart:', error);
+            }
         }
 
-        function createAddressChart(data) {
-            const ctx = document.getElementById('addressChart').getContext('2d');
-            
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: data.labels || ['Manila', 'Cebu', 'Davao', 'Quezon City', 'Others'],
-                    datasets: [{
-                        data: data.values || [35, 25, 15, 12, 13],
-                        backgroundColor: [
-                            '#ffc107',
-                            '#ff9800',
-                            '#f57c00',
-                            '#ff8f00',
-                            '#ffb300'
-                        ],
-                        borderWidth: 2,
-                        borderColor: '#fff'
-                    }]
-                },
-                options: chartOptions
-            });
-        }
-
-        function createItemsChart(data) {
-            const ctx = document.getElementById('itemsChart').getContext('2d');
-            
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: data.labels || ['Eyeglasses', 'Sunglasses', 'Contact Lenses', 'Frames', 'Accessories'],
-                    datasets: [{
-                        label: 'Items Sold',
-                        data: data.values || [150, 120, 90, 75, 45],
-                        backgroundColor: [
-                            '#ffc107',
-                            '#ff9800',
-                            '#f57c00',
-                            '#ff8f00',
-                            '#ffb300'
-                        ],
-                        borderColor: [
-                            '#ffc107',
-                            '#ff9800',
-                            '#f57c00',
-                            '#ff8f00',
-                            '#ffb300'
-                        ],
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    ...chartOptions,
-                    scales: {
-                        y: {
-                            beginAtZero: true
+        async function createSalesChart(data) {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            try {
+                const response = await fetch('/api/admin/sales-chart');
+                const result = await response.json();
+                
+                const chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: result.rows.map(row => row.month),
+                        datasets: [{
+                            label: 'Monthly Sales (₱)',
+                            data: result.rows.map(row => row.total),
+                            fill: true,
+                            backgroundColor: 'rgba(255, 193, 7, 0.2)',
+                            borderColor: '#ffc107',
+                            tension: 0.4,
+                            pointBackgroundColor: '#fff',
+                            pointBorderColor: '#ffc107',
+                            pointBorderWidth: 2,
+                            pointRadius: 6,
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return '₱' + value.toLocaleString();
+                                    }
+                                },
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.05)'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            }
                         }
                     }
-                }
-            });
+                });
+            } catch (error) {
+                console.error('Error creating sales chart:', error);
+            }
         }
 
-        function createOrderStatusChart(data) {
-            const ctx = document.getElementById('orderStatusChart').getContext('2d');
-            
-            new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: data.labels || ['Pending', 'Shipped', 'Delivered', 'Cancelled'],
-                    datasets: [{
-                        data: data.values || [25, 30, 40, 5],
-                        backgroundColor: [
-                            '#ffc107',
-                            '#17a2b8',
-                            '#28a745',
-                            '#dc3545'
-                        ],
-                        borderWidth: 2,
-                        borderColor: '#fff'
-                    }]
-                },
-                options: chartOptions
-            });
-        }
-
-        // Show notification
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 15px 20px;
-                border-radius: 8px;
-                color: white;
-                font-weight: 500;
-                z-index: 10000;
-                transform: translateX(100%);
-                transition: transform 0.3s ease;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-                ${type === 'error' ? 'background: #e74c3c;' : 
-                  type === 'success' ? 'background: #27ae60;' : 
-                  'background: #ffc107;'}
-            `;
-            notification.textContent = message;
-
-            document.body.appendChild(notification);
-
-            setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-            }, 100);
-
-            setTimeout(() => {
-                notification.style.transform = 'translateX(100%)';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 3000);
-        }
-
-        // Refresh dashboard data
-        function refreshDashboard() {
-            showNotification('Refreshing dashboard data...', 'info');
-            loadDashboardData();
-        }
-
-        // Auto-refresh every 5 minutes
-        setInterval(refreshDashboard, 300000);
-
-        // Handle responsive sidebar
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.admin-sidebar');
-            sidebar.classList.toggle('collapsed');
-        }
-
-        // Export dashboard data
-        function exportDashboard() {
-            showNotification('Export functionality coming soon!', 'info');
-        }
-
-        // Quick actions
-        function viewAllOrders() {
-            window.location.href = 'admin-orders.html';
-        }
-
-        function viewAllUsers() {
-            window.location.href = 'user.html';
-        }
-
-        function viewSettings() {
-            window.location.href = 'admin-settings.html';
-        }
-
-        // Logout function
-        function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('userRole');
-            window.location.href = '/login.html';
-        }
-
-        // Initialize tooltips and interactive elements
-        $(document).ready(function() {
-            // Add click handlers for analytics cards
-            $('.analytics-card').on('click', function() {
-                const label = $(this).find('.analytics-label').text().toLowerCase();
+        async function createItemsChart(data) {
+            const ctx = document.getElementById('itemsChart').getContext('2d');
+            try {
+                const response = await fetch('/api/admin/items-chart');
+                const result = await response.json();
                 
-                switch(label) {
-                    case 'total users':
-                        viewAllUsers();
-                        break;
-                    case 'total orders':
-                        viewAllOrders();
-                        break;
-                    case 'total revenue':
-                        viewAllOrders();
-                        break;
-                    default:
-                        showNotification('Feature coming soon!', 'info');
-                }
-            });
+                const chart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: result.rows.map(row => row.items),
+                        datasets: [{
+                            data: result.rows.map(row => row.total),
+                            backgroundColor: [
+                                '#ffc107',
+                                '#ff9800',
+                                '#ffeb3b',
+                                '#ffd740',
+                                '#ffe57f'
+                            ],
+                            borderColor: '#ffffff',
+                            borderWidth: 2,
+                            offset: 10
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                labels: {
+                                    padding: 20,
+                                    font: {
+                                        size: 12
+                                    }
+                                }
+                            }
+                        },
+                        cutout: '60%',
+                        radius: '90%'
+                    }
+                });
+            } catch (error) {
+                console.error('Error creating items chart:', error);
+            }
+        }
 
-            // Add hover effects
-            $('.analytics-card').hover(
-                function() {
-                    $(this).css('cursor', 'pointer');
-                },
-                function() {
-                    $(this).css('cursor', 'default');
-                }
-            );
-
-            // Chart resize handler
-            window.addEventListener('resize', function() {
-                // Charts will automatically resize due to responsive: true
-            });
-        });
-
-        // Error handling for failed API calls
-        window.addEventListener('unhandledrejection', function(event) {
-            console.error('Unhandled promise rejection:', event.reason);
-            showNotification('An error occurred while loading data', 'error');
-        });
-
-        // Network status monitoring
-        window.addEventListener('online', function() {
-            showNotification('Connection restored', 'success');
-            refreshDashboard();
-        });
-
-        window.addEventListener('offline', function() {
-            showNotification('Connection lost - working offline', 'error');
+        document.addEventListener('DOMContentLoaded', () => {
+            createAddressChart();
+            createSalesChart();
+            createItemsChart();
+            
+            // Refresh data every 5 minutes
+            setInterval(() => {
+                createAddressChart();
+                createSalesChart();
+                createItemsChart();
+            }, 300000);
         });
     </script>
 </body>

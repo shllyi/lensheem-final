@@ -32,50 +32,72 @@ exports.getAllCategories = (req, res) => {
   }
 };
 
-// Fetch all categories including deleted ones (for admin) with pagination
+// Fetch all categories including deleted ones (for admin) with pagination and search
 exports.getAllCategoriesWithDeleted = (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 20;
-  const offset = (page - 1) * limit;
+  const { 
+    search, 
+    categoryId, 
+    page = 1, 
+    limit = 20 
+  } = req.query;
+  const offset = (parseInt(page) - 1) * parseInt(limit);
   
-  // Get total count
-  const countSql = `SELECT COUNT(*) as total FROM category`;
+  let sql = `SELECT category_id, description, deleted_at FROM category`;
+  let countSql = `SELECT COUNT(*) as total FROM category`;
   
-  connection.query(countSql, (countErr, countResult) => {
-    if (countErr) {
-      console.error(countErr);
-      return res.status(500).json({
-        success: false,
-        error: 'Error counting categories',
-        details: countErr
-      });
+  let whereConditions = [];
+  let searchParams = [];
+  
+  // Add search functionality
+  if (search && search.trim()) {
+    const searchTerm = `%${search.trim()}%`;
+    whereConditions.push(`description LIKE ?`);
+    searchParams.push(searchTerm);
+  }
+  
+  // Add specific search conditions
+  if (categoryId && categoryId.trim()) {
+    whereConditions.push(`category_id = ?`);
+    searchParams.push(parseInt(categoryId.trim()));
+  }
+  
+
+  
+  if (whereConditions.length > 0) {
+    sql += ` WHERE ${whereConditions.join(' AND ')}`;
+    countSql += ` WHERE ${whereConditions.join(' AND ')}`;
+  }
+  
+  sql += ` ORDER BY category_id DESC LIMIT ? OFFSET ?`;
+  const queryParams = [...searchParams, parseInt(limit), offset];
+  
+
+  
+  // First get total count
+  connection.query(countSql, searchParams, (err, countResults) => {
+    if (err) {
+      console.error("Failed to count categories:", err);
+      return res.status(500).json({ success: false, message: "Failed to count categories." });
     }
+
+    const totalCount = countResults[0].total;
     
-    const total = countResult[0].total;
-    const totalPages = Math.ceil(total / limit);
-    
-    // Get paginated data
-    const sql = `SELECT category_id, description, deleted_at FROM category ORDER BY description ASC LIMIT ? OFFSET ?`;
-    
-    connection.query(sql, [limit, offset], (err, rows) => {
+    // Then get paginated results
+    connection.query(sql, queryParams, (err, rows) => {
       if (err) {
-        console.error(err);
-        return res.status(500).json({
-          success: false,
-          error: 'Error fetching categories',
-          details: err
-        });
+        console.error("Failed to fetch categories:", err);
+        return res.status(500).json({ success: false, message: "Failed to fetch categories." });
       }
 
       return res.status(200).json({
         success: true,
         data: rows || [],
         pagination: {
-          currentPage: page,
-          totalPages: totalPages,
-          totalItems: total,
-          itemsPerPage: limit,
-          hasMore: page < totalPages
+          currentPage: parseInt(page),
+          totalPages: Math.ceil(totalCount / parseInt(limit)),
+          totalItems: totalCount,
+          itemsPerPage: parseInt(limit),
+          hasMore: parseInt(page) < Math.ceil(totalCount / parseInt(limit))
         }
       });
     });

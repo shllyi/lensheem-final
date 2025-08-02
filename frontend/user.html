@@ -3,17 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Users - Lensheem</title>
-        <link rel="stylesheet" href="admin-header.html">
+    <title>Admin Categories - Lensheem</title>
+    <link rel="stylesheet" href="admin-header.html">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.16.1/sweetalert2.css"
-    integrity="sha512-fjO3Vy3QodX9c6G9AUmr6WuIaEPdGRxBjD7gjatG5gGylzYyrEq3U0q+smkG6CwIY0L8XALRFHh4KPHig0Q1ug=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
-    integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.16.1/sweetalert2.min.js"
-    integrity="sha512-LGHBR+kJ5jZSIzhhdfytPoEHzgaYuTRifq9g5l6ja6/k9NAOsAi5dQh4zQF6JIRB8cAYxTRedERUF+97/KuivQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+  
     <style>
         * {
             margin: 0;
@@ -33,7 +31,6 @@
             flex-direction: column;
             min-height: 100vh;
         }
-
 
         /* Main Content Area */
         .admin-main {
@@ -145,8 +142,8 @@
             overflow-y: auto;
         }
 
-        /* Users Container */
-        .users-container {
+        /* Categories Container */
+        .categories-container {
             background: white;
             border-radius: 15px;
             box-shadow: 0 5px 25px rgba(0,0,0,0.08);
@@ -169,7 +166,7 @@
 
         .analytics-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 20px;
             margin-bottom: 25px;
         }
@@ -261,149 +258,61 @@
             box-shadow: 0 4px 15px rgba(255,193,7,0.3);
         }
 
-        /* Filter Section */
-        .filter-section {
+        /* Simple Search Section */
+        .simple-search-section {
             background: white;
             border-radius: 12px;
             margin: 20px;
-            overflow: hidden;
-            border: 1px solid #f0f0f0;
-        }
-
-        .search-header {
-            background: #f8f9fa;
             padding: 20px 25px;
+            border: 1px solid #f0f0f0;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border-bottom: 1px solid #f0f0f0;
+            gap: 15px;
         }
 
-        .search-header:hover {
-            background: #fff9c4;
-        }
-
-        .search-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-            font-size: 16px;
-            color: #333;
-        }
-
-        .search-title i {
-            color: #ffc107;
-        }
-
-        .search-toggle {
-            color: #666;
-            transition: transform 0.3s ease;
-            font-size: 16px;
-        }
-
-        .search-toggle.active {
-            transform: rotate(180deg);
-        }
-
-        .search-content {
-            padding: 25px;
-            background: white;
-        }
-
-        .search-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-
-        .search-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .search-group label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-        }
-
-        .search-group label i {
-            color: #ffc107;
-            font-size: 12px;
-        }
-
-        .input-wrapper, .select-wrapper {
+        .search-input-wrapper {
+            flex: 1;
             position: relative;
             display: flex;
             align-items: center;
         }
 
-        .input-wrapper i, .select-wrapper i {
+        .search-input-wrapper i {
             position: absolute;
-            left: 12px;
+            left: 15px;
             color: #999;
-            font-size: 14px;
+            font-size: 16px;
             pointer-events: none;
         }
 
-        .search-input {
+        .simple-search-input {
             width: 100%;
             border: 1px solid #e9ecef;
             border-radius: 8px;
-            padding: 12px 12px 12px 35px;
-            font-size: 14px;
+            padding: 12px 15px 12px 45px;
+            font-size: 16px;
             color: #333;
             background: white;
             transition: all 0.3s ease;
         }
 
-        .search-input:focus {
+        .simple-search-input:focus {
             border-color: #ffc107;
             outline: none;
             box-shadow: 0 0 0 3px rgba(255,193,7,0.1);
         }
 
-        .search-select {
-            width: 100%;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            padding: 12px 12px 12px 35px;
-            font-size: 14px;
-            background: white;
-            color: #333;
-            transition: all 0.3s ease;
-            appearance: none;
-            cursor: pointer;
+        .simple-search-input::placeholder {
+            color: #999;
         }
 
-        .search-select:focus {
-            border-color: #ffc107;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(255,193,7,0.1);
-        }
-
-        .search-actions {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #f0f0f0;
-        }
-
-        .btn-search, .btn-clear {
+        .search-btn {
             display: flex;
             align-items: center;
             gap: 8px;
             padding: 12px 20px;
+            background: linear-gradient(135deg, #ffc107, #ff9800);
+            color: white;
             border: none;
             border-radius: 8px;
             font-size: 14px;
@@ -413,213 +322,199 @@
             text-decoration: none;
         }
 
-        .btn-search {
-            background: linear-gradient(135deg, #ffc107, #ff9800);
-            color: white;
-        }
-
-        .btn-search:hover {
-            background: linear-gradient(135deg, #ff9800, #ffc107);
+        .search-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(255,193,7,0.3);
         }
 
-        .btn-clear {
+        .clear-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
             background: #f8f9fa;
             color: #666;
             border: 1px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
         }
 
-        .btn-clear:hover {
-            background: #e9ecef;
+        .clear-btn:hover {
+            background: #fff9c4;
             color: #333;
+            border-color: #ffc107;
         }
 
-        /* Table Styles */
-        .table-container {
-            padding: 20px;
+        /* Data Table */
+        .data-table-container {
+            padding: 0;
+            margin: 20px;
         }
 
-        .users-table {
-            width: 100%;
-            border-collapse: collapse;
+        /* DataTables Custom Styling */
+        .dataTables_wrapper {
             background: white;
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
-        .users-table th {
+        .dataTables_wrapper .dataTables_length,
+        .dataTables_wrapper .dataTables_filter,
+        .dataTables_wrapper .dataTables_info,
+        .dataTables_wrapper .dataTables_processing,
+        .dataTables_wrapper .dataTables_paginate {
+            display: none !important;
+        }
+
+        .dataTables_wrapper .dataTables_scroll {
+            border-radius: 12px;
+        }
+
+        .dataTables_wrapper .dataTables_scrollHead {
             background: #f8f9fa;
-            padding: 15px 12px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 13px;
-            color: #333;
-            border-bottom: 2px solid #e9ecef;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
-        .users-table td {
-            padding: 12px;
-            border-bottom: 1px solid #f0f0f0;
-            font-size: 14px;
-            color: #666;
+        .dataTables_wrapper .dataTables_scrollHead table {
+            border-collapse: separate;
+            border-spacing: 0;
         }
 
-        .users-table tr:hover {
-            background: #fff9c4;
+        .dataTables_wrapper .dataTables_scrollHead th {
+            background: #f8f9fa !important;
+            padding: 15px 20px !important;
+            text-align: left !important;
+            font-weight: 600 !important;
+            color: #333 !important;
+            font-size: 14px !important;
+            border-bottom: 1px solid #f0f0f0 !important;
+            border: none !important;
         }
 
-        .users-table tr:last-child td {
-            border-bottom: none;
+        .dataTables_wrapper .dataTables_scrollBody {
+            border: none !important;
         }
 
-        /* Table Container with Horizontal Scroll */
-        .table-container {
-            width: 100%;
-            overflow-x: auto;
-            overflow-y: visible;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        .dataTables_wrapper .dataTables_scrollBody table {
+            border-collapse: separate;
+            border-spacing: 0;
         }
 
-        .table-container::-webkit-scrollbar {
-            height: 8px;
+        .dataTables_wrapper .dataTables_scrollBody td {
+            padding: 15px 20px !important;
+            border-bottom: 1px solid #f8f9fa !important;
+            font-size: 14px !important;
+            color: #333 !important;
+            border: none !important;
         }
 
-        .table-container::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
-        }
-
-        .table-container::-webkit-scrollbar-thumb {
-            background: #ffc107;
-            border-radius: 4px;
-        }
-
-        .table-container::-webkit-scrollbar-thumb:hover {
-            background: #e0a800;
-        }
-
-        .users-table {
-            min-width: 1200px; /* Ensure minimum width for all columns */
-            width: 100%;
-        }
-
-        /* User Photo */
-        .user-photo {
-            width: 40px;
-            height: 40px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 2px solid #f0f0f0;
-        }
-
-        /* Role and Status Badges */
-        .role-badge, .status-badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .role-admin {
-            background: linear-gradient(135deg, #dc3545, #c82333);
-            color: white;
-        }
-
-        .role-user {
-            background: linear-gradient(135deg, #28a745, #1e7e34);
-            color: white;
-        }
-
-        .status-active {
-            background: linear-gradient(135deg, #28a745, #1e7e34);
-            color: white;
-        }
-
-        .status-deactivated {
-            background: linear-gradient(135deg, #6c757d, #545b62);
-            color: white;
-        }
-
-        .status-deleted {
-            background: linear-gradient(135deg, #6c757d, #545b62);
-            color: white;
-        }
-
-        /* Action Buttons */
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .action-btn-small {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .dataTables_wrapper .dataTables_scrollBody tr {
             transition: all 0.3s ease;
-            font-size: 12px;
         }
 
-        .action-btn-small.role {
-            background: linear-gradient(135deg, #ffc107, #ff9800);
-            color: white;
+        .dataTables_wrapper .dataTables_scrollBody tr:hover {
+            background: #fff9c4 !important;
         }
 
-        .action-btn-small.role:hover {
-            background: linear-gradient(135deg, #ff9800, #ffc107);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(255,193,7,0.3);
+        .dataTables_wrapper .dataTables_scrollBody tr.deleted {
+            opacity: 0.6;
+            background-color: #f8f9fa !important;
         }
 
-        .action-btn-small.status {
-            background: linear-gradient(135deg, #17a2b8, #138496);
-            color: white;
+        /* Loading indicator */
+        .dataTables_processing {
+            background: rgba(255, 193, 7, 0.9) !important;
+            color: white !important;
+            border-radius: 8px !important;
+            padding: 15px 20px !important;
+            font-weight: 500 !important;
         }
 
-        .action-btn-small.status:hover {
-            background: linear-gradient(135deg, #138496, #17a2b8);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(23,162,184,0.3);
+        /* Infinite scroll loading */
+        .infinite-scroll-loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
         }
 
-        .action-btn-small.delete {
-            background: linear-gradient(135deg, #dc3545, #c82333);
-            color: white;
+        .infinite-scroll-loading .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ffc107;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
         }
 
-        .action-btn-small.delete:hover {
-            background: linear-gradient(135deg, #c82333, #dc3545);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(220,53,69,0.3);
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        .action-btn-small.restore {
-            background: linear-gradient(135deg, #28a745, #1e7e34);
-            color: white;
+        .action-buttons-cell {
+            display: flex;
+            gap: 6px;
         }
 
-        .action-btn-small.restore:hover {
-            background: linear-gradient(135deg, #1e7e34, #28a745);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(40,167,69,0.3);
+        .btn-action {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
-        /* Custom Modal Styles */
-        .custom-modal {
+        .btn-delete {
+            background: #f8f9fa;
+            color: #666;
+            border: 1px solid #e9ecef;
+        }
+
+        .btn-delete:hover {
+            background: #fff9c4;
+            color: #333;
+            border-color: #ffc107;
+        }
+
+        .btn-view {
+            background: #f8f9fa;
+            color: #666;
+            border: 1px solid #e9ecef;
+        }
+
+        .btn-view:hover {
+            background: #fff9c4;
+            color: #333;
+            border-color: #ffc107;
+        }
+
+        .btn-restore {
+            background: #f8f9fa;
+            color: #666;
+            border: 1px solid #e9ecef;
+        }
+
+        .btn-restore:hover {
+            background: #fff9c4;
+            color: #333;
+            border-color: #ffc107;
+        }
+
+        /* Modal Styles */
+        .modal {
             display: none;
             position: fixed;
             z-index: 1000;
@@ -628,60 +523,59 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0,0,0,0.5);
-            animation: fadeIn 0.3s ease;
-        }
-
-        .custom-modal.show {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            backdrop-filter: blur(5px);
         }
 
         .modal-content {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            background-color: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 12px;
             width: 90%;
             max-width: 500px;
-            max-height: 90vh;
+            max-height: 80vh;
             overflow-y: auto;
-            animation: slideIn 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .modal-header {
             background: linear-gradient(135deg, #ffc107, #ff9800);
             color: white;
             padding: 20px 25px;
-            border-radius: 15px 15px 0 0;
+            border-radius: 12px 12px 0 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .modal-title {
-            font-weight: 600;
-            font-size: 18px;
+        .modal-header h3 {
             margin: 0;
+            font-size: 20px;
+            font-weight: 600;
         }
 
         .close {
-            background: none;
-            border: none;
             color: white;
-            font-size: 24px;
+            font-size: 28px;
+            font-weight: bold;
             cursor: pointer;
-            padding: 0;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: background-color 0.3s ease;
+            transition: opacity 0.3s;
         }
 
         .close:hover {
-            background-color: rgba(255,255,255,0.2);
+            opacity: 0.7;
         }
 
         .modal-body {
@@ -693,17 +587,17 @@
         }
 
         .form-group label {
+            display: block;
+            margin-bottom: 8px;
             font-weight: 600;
             color: #333;
-            margin-bottom: 8px;
-            display: block;
         }
 
         .form-control {
             width: 100%;
+            padding: 12px 15px;
             border: 1px solid #e9ecef;
             border-radius: 8px;
-            padding: 12px 15px;
             font-size: 14px;
             transition: all 0.3s ease;
         }
@@ -714,151 +608,71 @@
             box-shadow: 0 0 0 3px rgba(255,193,7,0.1);
         }
 
+        .form-control.is-invalid {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+
+        .invalid-feedback {
+            display: block;
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
         .modal-footer {
-            border-top: 1px solid #f0f0f0;
             padding: 20px 25px;
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .btn-secondary {
             background: #f8f9fa;
-            color: #666;
-            border: 1px solid #e9ecef;
-        }
-
-        .btn-secondary:hover {
-            background: #e9ecef;
-            color: #333;
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #28a745, #1e7e34);
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: linear-gradient(135deg, #1e7e34, #28a745);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(40,167,69,0.3);
-        }
-
-        .btn-warning {
-            background: linear-gradient(135deg, #ffc107, #ff9800);
-            color: white;
-        }
-
-        .btn-warning:hover {
-            background: linear-gradient(135deg, #ff9800, #ffc107);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(255,193,7,0.3);
-        }
-
-        .btn-info {
-            background: linear-gradient(135deg, #17a2b8, #138496);
-            color: white;
-        }
-
-        .btn-info:hover {
-            background: linear-gradient(135deg, #138496, #17a2b8);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(23,162,184,0.3);
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideIn {
-            from { 
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to { 
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Loading States */
-        .loading {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #ffc107;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            border-top: 1px solid #e9ecef;
+            border-radius: 0 0 12px 12px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
             .admin-sidebar {
-                width: 100%;
-                position: fixed;
-                top: 0;
-                left: -100%;
-                z-index: 1000;
-                transition: left 0.3s ease;
+                width: 70px;
+                padding: 15px 10px;
             }
 
-            .admin-sidebar.active {
-                left: 0;
+            .admin-logo-text,
+            .sidebar-nav-item-text,
+            .nav-section-title {
+                display: none;
             }
 
-            .content-area {
-                margin-left: 0;
+            .admin-logo {
+                justify-content: center;
+                margin-bottom: 30px;
+            }
+
+            .sidebar-nav-item {
+                justify-content: center;
+                padding: 15px 10px;
             }
 
             .analytics-grid {
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                grid-template-columns: repeat(2, 1fr);
             }
 
-            .search-grid {
-                grid-template-columns: 1fr;
+            .simple-search-section {
+                flex-direction: column;
+                gap: 15px;
             }
-        }
 
-        /* Error styling */
-        .form-error {
-            border-color: #dc3545 !important;
-            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1) !important;
-        }
-
-        .error-message {
-            color: #dc3545;
-            font-size: 12px;
-            margin-top: 5px;
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="admin-container">
-            <iframe src="admin-header.html" style="width:100%;height:90px;border:none;" title="Admin Header"></iframe>
-
+        <iframe src="admin-header.html" style="width:100%;height:90px;border:none;" title="Admin Header"></iframe>
 
         <!-- Main Content Area -->
         <div class="admin-main">
@@ -880,7 +694,7 @@
                             <i class="fas fa-users"></i>
                             <span class="sidebar-nav-item-text">People</span>
                         </a>
-                        <a href="admin-orders.html" class="sidebar-nav-item active">
+                        <a href="admin-orders.html" class="sidebar-nav-item">
                             <i class="fas fa-shopping-cart"></i>
                             <span class="sidebar-nav-item-text">Orders</span>
                         </a>
@@ -892,9 +706,13 @@
                             <i class="fas fa-star"></i>
                             <span class="sidebar-nav-item-text">Reviews</span>
                         </a>
-                        <a href="admin-analytics.html" class="sidebar-nav-item">
-                            <i class="fas fa-chart-line"></i>
-                            <span class="sidebar-nav-item-text">Analytics</span>
+                        <a href="category.html" class="sidebar-nav-item active">
+                            <i class="fas fa-list"></i>
+                            <span class="sidebar-nav-item-text">Categories</span>
+                        </a>
+                        <a href="item.html" class="sidebar-nav-item">
+                            <i class="fas fa-box"></i>
+                            <span class="sidebar-nav-item-text">Items</span>
                         </a>
                     </div>
 
@@ -911,1032 +729,688 @@
                     </div>
                 </nav>
             </div>
+
             <!-- Content Area -->
             <div class="content-area">
-                <div class="users-container">
+                <div class="categories-container">
                     <!-- Page Header -->
                     <div class="page-header">
-                        <h1 class="page-title">User Management</h1>
-                        <!-- Analytics Grid -->
+                        <h1 class="page-title">Categories Management</h1>
+                        
                         <div class="analytics-grid">
                             <div class="analytics-card">
-                                <div class="analytics-icon">
-                                    <i class="fas fa-users"></i>
-                                </div>
-                                <div class="analytics-number" id="totalUsers">0</div>
-                                <div class="analytics-label">Total Users</div>
+                                <div class="analytics-icon">📂</div>
+                                <div class="analytics-number" id="totalCategories">0</div>
+                                <div class="analytics-label">Total Categories</div>
                             </div>
                             <div class="analytics-card">
-                                <div class="analytics-icon">
-                                    <i class="fas fa-user"></i>
-                                </div>
-                                <div class="analytics-number" id="regularUsers">0</div>
-                                <div class="analytics-label">Regular Users</div>
+                                <div class="analytics-icon">✅</div>
+                                <div class="analytics-number" id="activeCategories">0</div>
+                                <div class="analytics-label">Active</div>
                             </div>
                             <div class="analytics-card">
-                                <div class="analytics-icon">
-                                    <i class="fas fa-user-shield"></i>
-                                </div>
-                                <div class="analytics-number" id="adminUsers">0</div>
-                                <div class="analytics-label">Admin Users</div>
+                                <div class="analytics-icon">🗑️</div>
+                                <div class="analytics-number" id="deletedCategories">0</div>
+                                <div class="analytics-label">Deleted</div>
                             </div>
                             <div class="analytics-card">
-                                <div class="analytics-icon">
-                                    <i class="fas fa-user-check"></i>
-                                </div>
-                                <div class="analytics-number" id="activeUsers">0</div>
-                                <div class="analytics-label">Active Users</div>
-                            </div>
-                            <div class="analytics-card">
-                                <div class="analytics-icon">
-                                    <i class="fas fa-user-times"></i>
-                                </div>
-                                <div class="analytics-number" id="deactivatedUsers">0</div>
-                                <div class="analytics-label">Deactivated</div>
+                                <div class="analytics-icon">📊</div>
+                                <div class="analytics-number" id="thisMonth">0</div>
+                                <div class="analytics-label">This Month</div>
                             </div>
                         </div>
-                        <!-- Action Buttons -->
+                        
                         <div class="action-buttons">
-                            <button class="action-btn primary" onclick="showAddAdminModal()">
-                                <i class="fas fa-plus"></i> Add New Admin
+                            <button class="action-btn primary" onclick="openAddModal()">
+                                <i class="fas fa-plus"></i>
+                                Add Category
+                            </button>
+                            <button class="action-btn" onclick="exportToPDF()">
+                                <i class="fas fa-download"></i>
+                                Export PDF
                             </button>
                         </div>
                     </div>
-                    <!-- Filter Section -->
-                    <div class="filter-section">
-                        <div class="search-header" onclick="toggleSearch()">
-                            <div class="search-title">
-                                <i class="fas fa-search"></i> Search & Filter Users
-                            </div>
-                            <i class="fas fa-chevron-down search-toggle" id="searchToggle"></i>
+
+                    <!-- Simple Search Section -->
+                    <div class="simple-search-section">
+                        <div class="search-input-wrapper">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="simpleSearch" class="simple-search-input" placeholder="Search categories by name or description...">
                         </div>
-                        <div class="search-content" id="searchContent" style="display: none;">
-                            <div class="search-grid">
-                                <div class="search-group">
-                                    <label><i class="fas fa-user"></i> Name</label>
-                                    <div class="input-wrapper">
-                                        <i class="fas fa-search"></i>
-                                        <input type="text" class="search-input" id="searchName" placeholder="Search by name...">
-                                    </div>
-                                </div>
-                                <div class="search-group">
-                                    <label><i class="fas fa-envelope"></i> Email</label>
-                                    <div class="input-wrapper">
-                                        <i class="fas fa-search"></i>
-                                        <input type="text" class="search-input" id="searchEmail" placeholder="Search by email...">
-                                    </div>
-                                </div>
-                                <div class="search-group">
-                                    <label><i class="fas fa-user-tag"></i> Role</label>
-                                    <div class="select-wrapper">
-                                        <i class="fas fa-filter"></i>
-                                        <select class="search-select" id="searchRole">
-                                            <option value="">All Roles</option>
-                                            <option value="admin">Admin</option>
-                                            <option value="user">User</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="search-group">
-                                    <label><i class="fas fa-toggle-on"></i> Status</label>
-                                    <div class="select-wrapper">
-                                        <i class="fas fa-filter"></i>
-                                        <select class="search-select" id="searchStatus">
-                                            <option value="">All Status</option>
-                                            <option value="active">Active</option>
-                                            <option value="deactivated">Deactivated</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="search-actions">
-                                <button class="btn-search" type="button" onclick="performSearch()">
-                                    <i class="fas fa-search"></i> Search
-                                </button>
-                                <button class="btn-clear" type="button" onclick="clearSearch()">
-                                    <i class="fas fa-times"></i> Clear
-                                </button>
-                            </div>
-                        </div>
+                        <button type="button" class="search-btn" id="searchBtn">
+                            <i class="fas fa-search"></i>
+                            Search
+                        </button>
+                        <button type="button" class="clear-btn" id="clearSearch">
+                            <i class="fas fa-times"></i>
+                            Clear
+                        </button>
                     </div>
-                    <!-- Table Container -->
-                    <div class="table-container">
-                        <table class="users-table">
+
+                    <!-- Data Table -->
+                    <div class="data-table-container">
+                        <table class="data-table" id="categoriesTable">
                             <thead>
                                 <tr>
-                                    <th>User ID</th>
-                                    <th>Customer ID</th>
-                                    <th>Photo</th>
-                                    <th>Title</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Email</th>
-                                    <th>Address</th>
-                                    <th>Town</th>
-                                    <th>Phone</th>
-                                    <th>Role</th>
-                                    <th>Status</th>
+                                    <th>ID</th>
+                                    <th>Description</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="usersTableBody">
-                                <!-- Users will be loaded here -->
+                            <tbody>
+                                <!-- Data will be populated by JavaScript -->
                             </tbody>
                         </table>
+                        <div id="infiniteScrollLoading" class="infinite-scroll-loading" style="display: none;">
+                            <div class="spinner"></div>
+                            Loading more categories...
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-   <!-- Add New Admin Modal -->
-    <div class="custom-modal" id="userModal">
-        <div class="modal-content">
-            <form id="userForm" enctype="multipart/form-data">
-                <div class="modal-header">
-                    <h5 class="modal-title">Add New Admin</h5>
-                    <button type="button" class="close" onclick="hideModal('userModal')">
-                        <span>&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="userCustomerId">Customer ID</label>
-                        <input type="text" class="form-control" id="userCustomerId" name="customer_id" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="userEmail">Email *</label>
-                        <input type="email" class="form-control" id="userEmail" name="email" required>
-                        <div class="error-message" id="emailError" style="display: none;"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="userPassword">Password *</label>
-                        <input type="password" class="form-control" id="userPassword" name="password" required minlength="6">
-                        <div class="error-message" id="passwordError" style="display: none;"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="userTitle">Title</label>
-                        <select class="form-control" id="userTitle" name="title">
-                            <option value="">Select Title</option>
-                            <option value="Mr">Mr</option>
-                            <option value="Mrs">Mrs</option>
-                            <option value="Ms">Ms</option>
-                            <option value="Dr">Dr</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="userFname">First Name *</label>
-                        <input type="text" class="form-control" id="userFname" name="fname" required>
-                        <div class="error-message" id="fnameError" style="display: none;"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="userLname">Last Name *</label>
-                        <input type="text" class="form-control" id="userLname" name="lname" required>
-                        <div class="error-message" id="lnameError" style="display: none;"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="userAddressline">Address</label>
-                        <input type="text" class="form-control" id="userAddressline" name="addressline">
-                    </div>
-                    <div class="form-group">
-                        <label for="userTown">Town</label>
-                        <input type="text" class="form-control" id="userTown" name="town">
-                    </div>
-                    <div class="form-group">
-                        <label for="userPhone">Phone</label>
-                        <input type="tel" class="form-control" id="userPhone" name="phone">
-                    </div>
-                    <div class="form-group">
-                        <label for="userImage">Photo</label>
-                        <input type="file" class="form-control" id="userImage" name="image" accept="image/*">
-                        <small class="text-muted">Upload an image file (JPG, PNG, GIF)</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="userRole">Role *</label>
-                        <select class="form-control" id="userRole" name="role" required>
-                            <option value="admin" selected>Admin</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="userStatus">Status *</label>
-                        <select class="form-control" id="userStatus" name="status" required>
-                            <option value="active" selected>Active</option>
-                            <option value="deactivated">Deactivated</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="hideModal('userModal')">Cancel</button>
-                    <button type="submit" class="btn btn-success">Add Admin</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <!-- Role Change Modal -->
-    <div class="custom-modal" id="roleModal">
+
+    <!-- Category Modal -->
+    <div class="modal" id="categoryModal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Change User Role</h5>
-                <button type="button" class="close" onclick="hideModal('roleModal')">
-                    <span>&times;</span>
-                </button>
+                <h3 id="categoryModalLabel">Add Category</h3>
+                <span class="close" onclick="closeModal()">&times;</span>
             </div>
             <div class="modal-body">
-                <form id="roleForm">
+                <form id="categoryForm">
                     <div class="form-group">
-                        <label for="newRole">Select New Role *</label>
-                        <select class="form-control" id="newRole" name="new_role" required>
-                            <option value="">Select Role</option>
-                            <option value="admin">Admin</option>
-                            <option value="user">User</option>
-                        </select>
+                        <label for="category_description">Description <span style="color: #dc3545;">*</span></label>
+                        <input type="text" class="form-control" id="category_description" name="description" 
+                               required minlength="2" maxlength="100" 
+                               placeholder="Enter category description">
+                        <div class="invalid-feedback" id="description-error"></div>
                     </div>
-                    <input type="hidden" id="roleUserId" name="role_user_id">
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="hideModal('roleModal')">Cancel</button>
-                <button type="button" class="btn btn-warning" id="roleSubmit">Change Role</button>
-            </div>
-        </div>
-    </div>
-    <!-- Status Change Modal -->
-    <div class="custom-modal" id="statusModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Change User Status</h5>
-                <button type="button" class="close" onclick="hideModal('statusModal')">
-                    <span>&times;</span>
+                <button type="button" class="btn-action btn-view" onclick="closeModal()">
+                    <i class="fas fa-times"></i> Close
+                </button>
+                <button type="button" class="btn-action btn-view" id="categorySubmit">
+                    <i class="fas fa-save"></i> Save
+                </button>
+                <button type="button" class="btn-action btn-view" id="categoryUpdate" style="display: none;">
+                    <i class="fas fa-edit"></i> Update
                 </button>
             </div>
-            <div class="modal-body">
-                <form id="statusForm">
-                    <div class="form-group">
-                        <label for="newStatus">Select New Status *</label>
-                        <select class="form-control" id="newStatus" name="new_status" required>
-                            <option value="">Select Status</option>
-                            <option value="active">Active</option>
-                            <option value="deactivated">Deactivated</option>
-                        </select>
-                    </div>
-                    <input type="hidden" id="statusUserId" name="status_user_id">
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="hideModal('statusModal')">Cancel</button>
-                <button type="button" class="btn btn-info" id="statusSubmit">Change Status</button>
-            </div>
         </div>
     </div>
-   <script>
-        // ========== GLOBAL VARIABLES ========== //
-        const url = 'http://localhost:3000/';
-        let allUsers = [];
-        let filteredUsers = [];
-        
-        $(document).ready(function() {
-            // ========== AUTHENTICATION CHECK ========== //
+
+    <!-- Footer -->
+    <iframe src="footer_admin.html" style="width:100%;height:300px;border:none;" title="Admin Footer"></iframe>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+        const API_BASE_URL = '/api';
+        const baseUrl = 'http://localhost:3000/api/category';
+
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            setActiveNavItem();
+            initializeCategoriesTable();
+        });
+
+        // Check if user is authenticated and is admin
+        async function checkAuth() {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    redirectToLogin();
+                    return;
+                }
+
+                const response = await fetch(`${API_BASE_URL}/auth/admin-check`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    localStorage.removeItem('token');
+                    redirectToLogin();
+                    return;
+                }
+
+                const data = await response.json();
+                if (data.success) {
+                    loadAdminProfile();
+                } else {
+                    redirectToLogin();
+                }
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                redirectToLogin();
+            }
+        }
+
+        // Set active navigation item based on current page
+        function setActiveNavItem() {
+            const currentPage = window.location.pathname.split('/').pop();
+            const navItems = document.querySelectorAll('.nav-item, .sidebar-nav-item');
+            
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href') === currentPage) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // Redirect to login page
+        function redirectToLogin() {
+            window.location.href = '/login.html';
+        }
+
+        // Load admin profile information
+        async function loadAdminProfile() {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_BASE_URL}/auth/admin-profile`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to load profile');
+                }
+
+                const data = await response.json();
+                if (data.success) {
+                    currentUser = data.profile;
+                }
+            } catch (error) {
+                console.error('Failed to load profile:', error);
+            }
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 500;
+                z-index: 10000;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+                ${type === 'error' ? 'background: #e74c3c;' : 
+                  type === 'success' ? 'background: #27ae60;' : 
+                  'background: #ffc107;'}
+            `;
+            notification.textContent = message;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Initialize Categories Table
+        function initializeCategoriesTable() {
             const token = localStorage.getItem('token');
             const role = localStorage.getItem('role') || localStorage.getItem('userRole');
             
             if (!token) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Authentication Required',
-                    text: 'Please log in to access this page.',
-                }).then(() => {
-                    window.location.href = '/login.html';
-                });
+                alert('Please log in to access this page.');
+                window.location.href = '/login.html';
                 return;
             }
             
             if (!role || role.toLowerCase() !== 'admin') {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Access Denied',
-                    text: 'Admin access required.',
-                }).then(() => {
-                    window.location.href = '/index.html';
+                alert('Admin access required.');
+                window.location.href = '/index.html';
+                return;
+            }
+
+            let currentPage = 1;
+            let isLoading = false;
+            let hasMoreData = true;
+            const pageSize = 20;
+            let searchParams = {};
+            let dataTable;
+            
+            // Initialize DataTable
+            dataTable = $('#categoriesTable').DataTable({
+                processing: true,
+                serverSide: false,
+                searching: false,
+                ordering: true,
+                info: false,
+                lengthChange: false,
+                pageLength: pageSize,
+                paging: false,
+                scrollY: '60vh',
+                scrollCollapse: true,
+                scrollX: true,
+                autoWidth: false,
+                language: {
+                    processing: '<div class="spinner"></div> Loading categories...',
+                    emptyTable: '<div style="text-align: center; padding: 40px; color: #666;">No categories found.</div>',
+                    zeroRecords: '<div style="text-align: center; padding: 40px; color: #666;">No categories found.</div>'
+                },
+                columnDefs: [
+                    { orderable: false, targets: [2] } // Actions column
+                ],
+                order: [[0, 'desc']], // Sort by ID descending
+                createdRow: function(row, data, dataIndex) {
+                    // Add custom classes to rows
+                    if (data[2] && data[2].includes('Restore')) {
+                        $(row).addClass('deleted');
+                    }
+                }
+            });
+            
+            // Load initial data
+            loadCategories(currentPage);
+            
+            // Search form submission
+            $('#searchBtn').on('click', function(e) {
+                e.preventDefault();
+                
+                const simpleSearch = $('#simpleSearch').val().trim();
+                searchParams = {
+                    search: simpleSearch
+                }; // categoryId is not needed here, the backend should filter by search term
+                currentPage = 1;
+                hasMoreData = true;
+                dataTable.clear().draw();
+                loadCategories(currentPage);
+            });
+            
+            // Simple search functionality
+            $('#simpleSearch').on('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    $('#searchBtn').click();
+                }
+            });
+            
+            // Clear search
+            $('#clearSearch').on('click', function() {
+                $('#simpleSearch').val('');
+                searchParams = {};
+                currentPage = 1;
+                hasMoreData = true;
+                dataTable.clear().draw();
+                loadCategories(currentPage);
+                showNotification('Search cleared!', 'success');
+            });
+            
+            // Infinite scroll handler
+            $('.dataTables_scrollBody').on('scroll', function() {
+                const scrollTop = $(this).scrollTop();
+                const scrollHeight = this.scrollHeight;
+                const clientHeight = this.clientHeight;
+                
+                // Load more when user scrolls to bottom (with 100px threshold)
+                if (scrollTop + clientHeight >= scrollHeight - 100 && hasMoreData && !isLoading) {
+                    loadCategories(currentPage + 1);
+                }
+            });
+            
+            function loadCategories(page) {
+                if (isLoading) return;
+                
+                isLoading = true;
+                
+                if (page === 1) {
+                    $('#infiniteScrollLoading').hide();
+                } else {
+                    $('#infiniteScrollLoading').show();
+                }
+                
+                let queryParams = `page=${page}&limit=${pageSize}`;
+                
+                // Add search parameters as separate query parameters
+                if (searchParams.search) {
+                    queryParams += `&search=${encodeURIComponent(searchParams.search)}`;
+                }
+                // Although categoryId is not used in this search, keeping the logic for future reference if needed
+                if (searchParams.categoryId) {
+                    queryParams += `&search=${encodeURIComponent(searchParams.search.trim())}`;
+                }
+                
+                $.ajax({
+                    url: `${baseUrl}/admin/all?${queryParams}`,
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            if (response.data.length === 0) {
+                                hasMoreData = false;
+                                if (page === 1) {
+                                    dataTable.clear().draw();
+                                }
+                            } else {
+                                const rows = response.data.map(category => {
+                                    const isDeleted = category.deleted_at ? 'deleted' : '';
+                                    
+                                    let actionButtons = '';
+                                    if (category.deleted_at) {
+                                        actionButtons = `
+                                            <button class="btn-action btn-restore" onclick="restoreCategory('${category.category_id}')">
+                                                <i class="fas fa-undo"></i> Restore
+                                            </button>`;
+                                    } else {
+                                        actionButtons = `
+                                            <button class="btn-action btn-view" onclick="editCategory('${category.category_id}', '${category.description}')">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </button>
+                                            <button class="btn-action btn-delete" onclick="deleteCategory('${category.category_id}')">
+                                                <i class="fas fa-trash"></i> Delete
+                                            </button>`;
+                                    }
+
+                                    return [
+                                        category.category_id,
+                                        category.description,
+                                        actionButtons
+                                    ];
+                                });
+                                
+                                if (page === 1) {
+                                    dataTable.clear().rows.add(rows).draw();
+                                    updateAnalytics(response.data);
+                                } else {
+                                    dataTable.rows.add(rows).draw(false);
+                                }
+                                
+                                currentPage = page;
+                                
+                                if (response.data.length < pageSize) {
+                                    hasMoreData = false;
+                                }
+                            }
+                        } else {
+                            if (page === 1) {
+                                dataTable.clear().draw();
+                            }
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        if (page === 1) {
+                            dataTable.clear().draw();
+                        }
+                        showNotification('Failed to load categories. Please try again.', 'error');
+                    },
+                    complete: function() {
+                        isLoading = false;
+                        $('#infiniteScrollLoading').hide();
+                    }
                 });
+            }
+
+            function updateAnalytics(data) {
+                if (data && data.length > 0) {
+                    const total = data.length;
+                    const active = data.filter(category => !category.deleted_at).length;
+                    const deleted = data.filter(category => category.deleted_at).length;
+                    
+                    // Calculate this month's categories
+                    const thisMonth = new Date().getMonth();
+                    const thisYear = new Date().getFullYear();
+                    const thisMonthCategories = data.filter(category => {
+                        const categoryDate = new Date(category.created_at);
+                        return categoryDate.getMonth() === thisMonth && categoryDate.getFullYear() === thisYear;
+                    }).length;
+                    
+                    $('#totalCategories').text(total);
+                    $('#activeCategories').text(active);
+                    $('#deletedCategories').text(deleted);
+                    $('#thisMonth').text(thisMonthCategories);
+                } else {
+                    $('#totalCategories').text('0');
+                    $('#activeCategories').text('0');
+                    $('#deletedCategories').text('0');
+                    $('#thisMonth').text('0');
+                }
+            }
+        }
+
+        // Utility functions
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+        }
+
+        // Modal functions
+        function openAddModal() {
+            $('#categoryModalLabel').text('Add Category');
+            $('#category_description').val('');
+            $('#categorySubmit').show();
+            $('#categoryUpdate').hide();
+            $('#categoryModal').show();
+        }
+
+        function closeModal() {
+            $('#categoryModal').hide();
+        }
+
+        // CRUD functions
+        function editCategory(categoryId, description) {
+            $('#categoryModalLabel').text('Edit Category');
+            $('#category_description').val(description);
+            $('#categorySubmit').hide();
+            $('#categoryUpdate').show().attr('onclick', `updateCategory('${categoryId}')`);
+            $('#categoryModal').show();
+        }
+
+        function saveCategory() {
+            const description = $('#category_description').val().trim();
+            
+            if (!description) {
+                showNotification('Please enter a category description.', 'error');
                 return;
             }
             
-            // ========== INITIALIZATION ========== //
-            fetchUsers();
-        });
-
-        // ========== MODAL FUNCTIONS ========== //
-        function showModal(modalId) {
-            document.getElementById(modalId).classList.add('show');
-        }
-
-        function hideModal(modalId) {
-            document.getElementById(modalId).classList.remove('show');
-            // Reset form if it exists
-            const form = document.querySelector(`#${modalId} form`);
-            if (form) {
-                form.reset();
-                // Clear error messages
-                clearFormErrors();
-            }
-        }
-
-        function showAddAdminModal() {
-            $('#userCustomerId').val(getNextCustomerId());
-            showModal('userModal');
-        }
-
-        function changeRole(userId) {
-            document.getElementById('roleUserId').value = userId;
-            showModal('roleModal');
-        }
-
-        function changeStatus(userId) {
-            document.getElementById('statusUserId').value = userId;
-            showModal('statusModal');
-        }
-
-        function deleteUser(userId) {
-            Swal.fire({
-                title: 'Delete User',
-                text: 'Are you sure you want to delete this user? This action can be undone later.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#dc3545',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Yes, delete user!',
-                cancelButtonText: 'Cancel'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    performDeleteUser(userId);
-                }
-            });
-        }
-
-        function restoreUser(userId) {
-            Swal.fire({
-                title: 'Restore User',
-                text: 'Are you sure you want to restore this user?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#28a745',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Yes, restore user!',
-                cancelButtonText: 'Cancel'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    performRestoreUser(userId);
-                }
-            });
-        }
-
-        function performDeleteUser(userId) {
             const token = localStorage.getItem('token');
-
-            Swal.fire({
-                title: 'Deleting User...',
-                allowOutsideClick: false,
-                didOpen: () => { Swal.showLoading(); }
-            });
-
+            
             $.ajax({
-                method: "DELETE",
-                url: `${url}api/users/users/${userId}`,
-                dataType: "json",
+                url: baseUrl,
+                method: 'POST',
                 headers: {
-                    'Authorization': 'Bearer ' + token
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
                 },
-                success: function(data) {
-                    console.log('Delete user response:', data);
-                    
-                    fetchUsersIncludingDeleted();
-                    
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'User Deleted!',
-                        text: 'User has been deleted successfully.',
-                        timer: 2000,
-                        showConfirmButton: false
-                    });
-                },
-                error: function(xhr) {
-                    console.error('Delete user error:', xhr);
-                    
-                    let errorMessage = 'Failed to delete user. Please try again.';
-                    if (xhr.responseJSON) {
-                        if (xhr.responseJSON.message) {
-                            errorMessage = xhr.responseJSON.message;
-                        } else if (xhr.responseJSON.error) {
-                            errorMessage = xhr.responseJSON.error;
-                        }
+                data: JSON.stringify({ description: description }),
+                success: function(response) {
+                    if (response.success) {
+                        showNotification('Category added successfully!', 'success');
+                        closeModal();
+                        location.reload();
+                    } else {
+                        showNotification(response.message || 'Failed to add category.', 'error');
                     }
-                    
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: errorMessage,
-                    });
+                },
+                error: function(xhr, status, error) {
+                    showNotification('Failed to add category.', 'error');
                 }
             });
         }
 
-        function performRestoreUser(userId) {
+        function updateCategory(categoryId) {
+            const description = $('#category_description').val().trim();
+            
+            if (!description) {
+                showNotification('Please enter a category description.', 'error');
+                return;
+            }
+            
             const token = localStorage.getItem('token');
-
-            Swal.fire({
-                title: 'Restoring User...',
-                allowOutsideClick: false,
-                didOpen: () => { Swal.showLoading(); }
-            });
-
+            
             $.ajax({
-                method: "PUT",
-                url: `${url}api/users/users/${userId}/restore`,
-                dataType: "json",
+                url: `${baseUrl}/${categoryId}`,
+                method: 'PUT',
                 headers: {
-                    'Authorization': 'Bearer ' + token
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
                 },
-                success: function(data) {
-                    console.log('Restore user response:', data);
-                    
-                    fetchUsersIncludingDeleted();
-                    
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'User Restored!',
-                        text: 'User has been restored successfully.',
-                        timer: 2000,
-                        showConfirmButton: false
-                    });
-                },
-                error: function(xhr) {
-                    console.error('Restore user error:', xhr);
-                    
-                    let errorMessage = 'Failed to restore user. Please try again.';
-                    if (xhr.responseJSON) {
-                        if (xhr.responseJSON.message) {
-                            errorMessage = xhr.responseJSON.message;
-                        } else if (xhr.responseJSON.error) {
-                            errorMessage = xhr.responseJSON.error;
-                        }
+                data: JSON.stringify({ description: description }),
+                success: function(response) {
+                    if (response.success) {
+                        showNotification('Category updated successfully!', 'success');
+                        closeModal();
+                        location.reload();
+                    } else {
+                        showNotification(response.message || 'Failed to update category.', 'error');
                     }
-                    
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: errorMessage,
-                    });
+                },
+                error: function(xhr, status, error) {
+                    showNotification('Failed to update category.', 'error');
                 }
             });
         }
 
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            if (event.target.classList.contains('custom-modal')) {
-                event.target.classList.remove('show');
+        function deleteCategory(categoryId) {
+            if (confirm('Are you sure you want to delete this category?')) {
+                const token = localStorage.getItem('token');
+                
+                $.ajax({
+                    url: `${baseUrl}/${categoryId}`,
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            showNotification('Category deleted successfully!', 'success');
+                            location.reload();
+                        } else {
+                            showNotification(response.message || 'Failed to delete category.', 'error');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        showNotification('Failed to delete category.', 'error');
+                    }
+                });
             }
         }
 
-        // ========== FORM VALIDATION ========== //
-        function clearFormErrors() {
-            $('.form-control').removeClass('form-error');
-            $('.error-message').hide();
+        function restoreCategory(categoryId) {
+            if (confirm('Are you sure you want to restore this category?')) {
+                const token = localStorage.getItem('token');
+                
+                $.ajax({
+                    url: `${baseUrl}/restore/${categoryId}`,
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            showNotification('Category restored successfully!', 'success');
+                            location.reload();
+                        } else {
+                            showNotification(response.message || 'Failed to restore category.', 'error');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        showNotification('Failed to restore category.', 'error');
+                    }
+                });
+            }
         }
 
-        function showFieldError(fieldId, message) {
-            $('#' + fieldId).addClass('form-error');
-            $('#' + fieldId + 'Error').text(message).show();
+        // Export to PDF
+        function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Add title
+            doc.setFontSize(20);
+            doc.setTextColor(255, 193, 7);
+            doc.text('Lensheem - Categories Report', 20, 20);
+
+            // Add date
+            doc.setFontSize(12);
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 20, 30);
+
+            // Get table data from DataTable
+            const dataTable = $('#categoriesTable').DataTable();
+            const tableData = dataTable.data().toArray();
+            
+            const rows = tableData.map(row => {
+                return [
+                    row[0] || '', // ID
+                    row[1] || ''  // Description
+                ];
+            });
+
+            // Add table
+            doc.autoTable({
+                head: [['ID', 'Description']],
+                body: rows,
+                startY: 40,
+                styles: {
+                    fontSize: 10,
+                    cellPadding: 3
+                },
+                headStyles: {
+                    fillColor: [255, 193, 7],
+                    textColor: [255, 255, 255]
+                },
+                alternateRowStyles: {
+                    fillColor: [248, 249, 250]
+                }
+            });
+
+            // Add analytics summary
+            const totalCategories = document.getElementById('totalCategories').textContent;
+            const activeCategories = document.getElementById('activeCategories').textContent;
+            const deletedCategories = document.getElementById('deletedCategories').textContent;
+            const thisMonth = document.getElementById('thisMonth').textContent;
+
+            const finalY = doc.lastAutoTable.finalY + 20;
+            doc.setFontSize(14);
+            doc.setTextColor(255, 193, 7);
+            doc.text('Summary', 20, finalY);
+
+            doc.setFontSize(10);
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Total Categories: ${totalCategories}`, 20, finalY + 10);
+            doc.text(`Active Categories: ${activeCategories}`, 20, finalY + 20);
+            doc.text(`Deleted Categories: ${deletedCategories}`, 20, finalY + 30);
+            doc.text(`This Month: ${thisMonth}`, 20, finalY + 40);
+
+            // Save PDF
+            doc.save('lensheem-categories-report.pdf');
+            showNotification('PDF exported successfully!', 'success');
         }
 
-        function validateForm() {
-            clearFormErrors();
-            let isValid = true;
-
-            // Email validation
-            const email = $('#userEmail').val().trim();
-            if (!email) {
-                showFieldError('userEmail', 'Email is required');
-                isValid = false;
-            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                showFieldError('userEmail', 'Please enter a valid email address');
-                isValid = false;
-            }
-
-            // Password validation
-            const password = $('#userPassword').val();
-            if (!password) {
-                showFieldError('userPassword', 'Password is required');
-                isValid = false;
-            } else if (password.length < 6) {
-                showFieldError('userPassword', 'Password must be at least 6 characters long');
-                isValid = false;
-            }
-
-            // First name validation
-            const fname = $('#userFname').val().trim();
-            if (!fname) {
-                showFieldError('userFname', 'First name is required');
-                isValid = false;
-            }
-
-            // Last name validation
-            const lname = $('#userLname').val().trim();
-            if (!lname) {
-                showFieldError('userLname', 'Last name is required');
-                isValid = false;
-            }
-
-            return isValid;
-        }
-
-        // ========== UTILITY FUNCTIONS ========== //
-        function getImageUrl(imagePath) {
-    if (!imagePath || imagePath.trim() === '' || imagePath === 'null') {
-        // Default image from backend uploads folder
-        return 'http://localhost:3000/uploads/default.jpg';
-    }
-    // Only use the filename, not any folder prefix
-    let filename = imagePath.split('/').pop();
-    return `http://localhost:3000/uploads/${filename}`;
-}
+        // Event listeners
+        $('#categorySubmit').on('click', saveCategory);
 
         function logout() {
-            Swal.fire({
-                title: 'Logout',
-                text: 'Are you sure you want to logout?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#ffc107',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Yes, logout!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('role');
-                    localStorage.removeItem('userRole');
-                    window.location.href = '/login.html';
-                }
-            });
+            localStorage.removeItem('token');
+            window.location.href = '/login.html';
         }
-
-        // ========== ANALYTICS FUNCTIONS ========== //
-        function updateAnalytics() {
-            const totalUsers = allUsers.length;
-            const regularUsers = allUsers.filter(user => user.role && user.role.toLowerCase() === 'user').length;
-            const adminUsers = allUsers.filter(user => user.role && user.role.toLowerCase() === 'admin').length;
-            const activeUsers = allUsers.filter(user => user.status && user.status.toLowerCase() === 'active').length;
-            const deactivatedUsers = allUsers.filter(user => user.status && user.status.toLowerCase() === 'deactivated').length;
-
-            $('#totalUsers').text(totalUsers);
-            $('#regularUsers').text(regularUsers);
-            $('#adminUsers').text(adminUsers);
-            $('#activeUsers').text(activeUsers);
-            $('#deactivatedUsers').text(deactivatedUsers);
-
-            console.log('Analytics Update:', {
-                totalUsers,
-                regularUsers,
-                adminUsers,
-                activeUsers,
-                deactivatedUsers
-            });
-        }
-
-        // ========== RENDERING FUNCTIONS ========== //
-        function renderUserRow(user) {
-            const roleClass = `role-${user.role.toLowerCase()}`;
-            const statusClass = `status-${user.status.toLowerCase()}`;
-            const photoUrl = getImageUrl(user.image_path);
-            const isDeleted = user.deleted_at !== null && user.deleted_at !== undefined;
-            const rowClass = isDeleted ? 'style="opacity: 0.6; background-color: #f8f9fa;"' : '';
-
-            // Different action buttons based on deleted status
-            let actionButtons = '';
-            if (isDeleted) {
-                actionButtons = `
-                    <button class="action-btn-small restore" onclick="restoreUser(${user.user_id})" title="Restore User">
-                        <i class="fas fa-undo"></i>
-                    </button>
-                `;
-            } else {
-                actionButtons = `
-                    <button class="action-btn-small role" onclick="changeRole(${user.user_id})" title="Change Role">
-                        <i class="fas fa-user-cog"></i>
-                    </button>
-                    <button class="action-btn-small status" onclick="changeStatus(${user.user_id})" title="Change Status">
-                        <i class="fas fa-user-check"></i>
-                    </button>
-                    <button class="action-btn-small delete" onclick="deleteUser(${user.user_id})" title="Delete User">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                `;
-            }
-
-            const statusDisplay = isDeleted ? 
-                '<span class="status-badge status-deleted">DELETED</span>' : 
-                `<span class="status-badge ${statusClass}">${user.status.charAt(0).toUpperCase() + user.status.slice(1)}</span>`;
-
-            return `<tr ${rowClass}>
-                <td>${user.user_id || ''}</td>
-                <td>${user.customer_id || ''}</td>
-                <td><img src="${photoUrl}" alt="User Photo" class="user-photo" onerror="handleImgError(this)"></td>
-                <td>${user.title || ''}</td>
-                <td>${user.fname || ''}</td>
-                <td>${user.lname || ''}</td>
-                <td>${user.email}</td>
-                <td>${user.addressline || ''}</td>
-                <td>${user.town || ''}</td>
-                <td>${user.phone || ''}</td>
-                <td><span class="role-badge ${roleClass}">${user.role.charAt(0).toUpperCase() + user.role.slice(1)}</span></td>
-                <td>${statusDisplay}</td>
-                <td>
-                    <div class="action-buttons">
-                        ${actionButtons}
-                    </div>
-                </td>
-            </tr>`;
-        }
-
-        function renderUsers(users) {
-            const tbody = $('#usersTableBody');
-            tbody.empty();
-
-            if (users.length === 0) {
-                tbody.append('<tr><td colspan="13" style="text-align: center; padding: 40px; color: #666;">No users found.</td></tr>');
-                return;
-            }
-
-            users.forEach(user => {
-                tbody.append(renderUserRow(user));
-            });
-        }
-
-        // ========== DATA FETCHING ========== //
-        function fetchUsers() {
-            const token = localStorage.getItem('token');
-            
-            $.ajax({
-                url: `${url}api/users/users`,
-                method: 'GET',
-                dataType: 'json',
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                success: function(data) {
-                    console.log('Users API Response:', data);
-                    
-                    if (data.success && data.rows) {
-                        allUsers = data.rows;
-                        filteredUsers = [...allUsers];
-                        renderUsers(filteredUsers);
-                        updateAnalytics();
-                    } else {
-                        console.error('API returned success=false or no rows:', data);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: data.message || 'Failed to load users.',
-                        });
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Failed to fetch users:', {xhr, status, error});
-                    
-                    let errorMessage = 'Failed to load user data. Please check your connection and try again.';
-                    if (xhr.responseJSON && xhr.responseJSON.message) {
-                        errorMessage = xhr.responseJSON.message;
-                    }
-                    
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: errorMessage,
-                    });
-                }
-            });
-        }
-
-        function fetchUsersIncludingDeleted() {
-            const token = localStorage.getItem('token');
-            
-            $.ajax({
-                url: `${url}api/users/users/all`,
-                method: 'GET',
-                dataType: 'json',
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                success: function(data) {
-                    console.log('Users (including deleted) API Response:', data);
-                    
-                    if (data.success && data.rows) {
-                        allUsers = data.rows;
-                        filteredUsers = [...allUsers];
-                        renderUsers(filteredUsers);
-                        updateAnalytics();
-                    } else {
-                        console.error('API returned success=false or no rows:', data);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: data.message || 'Failed to load users.',
-                        });
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Failed to fetch users including deleted:', {xhr, status, error});
-                    
-                    let errorMessage = 'Failed to load user data. Please check your connection and try again.';
-                    if (xhr.responseJSON && xhr.responseJSON.message) {
-                        errorMessage = xhr.responseJSON.message;
-                    }
-                    
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: errorMessage,
-                    });
-                }
-            });
-        }
-
-        // ========== SEARCH FUNCTIONS ========== //
-        function performSearch() {
-            const nameSearch = $('#searchName').val().toLowerCase();
-            const emailSearch = $('#searchEmail').val().toLowerCase();
-            const roleFilter = $('#searchRole').val();
-            const statusFilter = $('#searchStatus').val();
-
-            filteredUsers = allUsers.filter(user => {
-                const nameMatch = !nameSearch ||
-                    (user.fname && user.fname.toLowerCase().includes(nameSearch)) ||
-                    (user.lname && user.lname.toLowerCase().includes(nameSearch));
-
-                const emailMatch = !emailSearch ||
-                    (user.email && user.email.toLowerCase().includes(emailSearch));
-
-                const roleMatch = !roleFilter || user.role === roleFilter;
-                const statusMatch = !statusFilter || user.status === statusFilter;
-
-                return nameMatch && emailMatch && roleMatch && statusMatch;
-            });
-
-            renderUsers(filteredUsers);
-        }
-
-        function clearSearch() {
-            $('#searchName').val('');
-            $('#searchEmail').val('');
-            $('#searchRole').val('');
-            $('#searchStatus').val('');
-            filteredUsers = [...allUsers];
-            renderUsers(filteredUsers);
-        }
-
-        function toggleSearch() {
-            const content = $('#searchContent');
-            const toggle = $('#searchToggle');
-            
-            if (content.is(':visible')) {
-                content.slideUp();
-                toggle.removeClass('active');
-            } else {
-                content.slideDown();
-                toggle.addClass('active');
-            }
-        }
-
-        // ========== FORM SUBMISSION ========== //
-        $(document).ready(function() {
-                $('#userForm').on('submit', function(e) {
-        e.preventDefault();
-
-        if (!validateForm()) {
-            return;
-        }
-
-        const token = localStorage.getItem('token');
-        const submitBtn = $(this).find('button[type="submit"]');
-
-        // Use FormData for file upload
-        const formData = new FormData(this);
-
-        // Add combined name field if backend expects it
-        const fname = $('#userFname').val().trim();
-        const lname = $('#userLname').val().trim();
-        formData.append('name', `${fname} ${lname}`.trim());
-
-        submitBtn.prop('disabled', true).html('<span class="loading-spinner"></span> Creating...');
-
-        Swal.fire({
-            title: 'Creating Admin...',
-            allowOutsideClick: false,
-            didOpen: () => { Swal.showLoading(); }
-        });
-
-        $.ajax({
-            method: "POST",
-            url: url + 'api/users/users',
-            data: formData,
-            processData: false,
-            contentType: false,
-            headers: {
-                'Authorization': 'Bearer ' + token
-            },
-            success: function(data) {
-                hideModal('userModal');
-                fetchUsers();
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Admin Created!',
-                    text: 'New admin has been created successfully.',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-
-                submitBtn.prop('disabled', false).html('Add Admin');
-            },
-            error: function(xhr) {
-                let errorMessage = 'Failed to create admin. Please try again.';
-                if (xhr.responseJSON) {
-                    if (xhr.responseJSON.message) {
-                        errorMessage = xhr.responseJSON.message;
-                    } else if (xhr.responseJSON.error) {
-                        errorMessage = xhr.responseJSON.error;
-                    }
-                }
-
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: errorMessage,
-                });
-
-                submitBtn.prop('disabled', false).html('Add Admin');
-            }
-        }); 
-            });
-
-            // ========== ROLE CHANGE ========== //
-            $('#roleSubmit').on('click', function() {
-                const token = localStorage.getItem('token');
-                const userId = $('#roleUserId').val();
-                const newRole = $('#newRole').val();
-
-                if (!newRole) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: 'Please select a role.',
-                    });
-                    return;
-                }
-
-                const submitBtn = $(this);
-                submitBtn.prop('disabled', true).html('<span class="loading-spinner"></span> Updating...');
-
-                Swal.fire({
-                    title: 'Updating Role...',
-                    allowOutsideClick: false,
-                    didOpen: () => { Swal.showLoading(); }
-                });
-
-                $.ajax({
-                    method: "PUT",
-                    url: `${url}api/users/users/${userId}/role`,
-                    data: JSON.stringify({ role: newRole }),
-                    contentType: 'application/json',
-                    dataType: "json",
-                    headers: {
-                        'Authorization': 'Bearer ' + token
-                    },
-                    success: function(data) {
-                        hideModal('roleModal');
-                        fetchUsers();
-                        
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Role Updated!',
-                            text: 'User role has been updated successfully.',
-                            timer: 2000,
-                            showConfirmButton: false
-                        });
-                        
-                        submitBtn.prop('disabled', false).html('Change Role');
-                    },
-                    error: function(xhr) {
-                        console.error('Role update error:', xhr);
-                        
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: xhr.responseJSON?.message || xhr.responseJSON?.error || 'Failed to update role. Please try again.',
-                        });
-                        
-                        submitBtn.prop('disabled', false).html('Change Role');
-                    }
-                });
-            });
-
-            // ========== STATUS CHANGE ========== //
-            $('#statusSubmit').on('click', function() {
-                const token = localStorage.getItem('token');
-                const userId = $('#statusUserId').val();
-                const newStatus = $('#newStatus').val();
-
-                if (!newStatus) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: 'Please select a status.',
-                    });
-                    return;
-                }
-
-                const submitBtn = $(this);
-                submitBtn.prop('disabled', true).html('<span class="loading-spinner"></span> Updating...');
-
-                Swal.fire({
-                    title: 'Updating Status...',
-                    allowOutsideClick: false,
-                    didOpen: () => { Swal.showLoading(); }
-                });
-
-                $.ajax({
-                    method: "PUT",
-                    url: `${url}api/users/users/${userId}/status`,
-                    data: JSON.stringify({ status: newStatus }),
-                    contentType: 'application/json',
-                    dataType: "json",
-                    headers: {
-                        'Authorization': 'Bearer ' + token
-                    },
-                    success: function(data) {
-                        hideModal('statusModal');
-                        fetchUsers();
-                        
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Status Updated!',
-                            text: 'User status has been updated successfully.',
-                            timer: 2000,
-                            showConfirmButton: false
-                        });
-                        
-                        submitBtn.prop('disabled', false).html('Change Status');
-                    },
-                    error: function(xhr) {
-                        console.error('Status update error:', xhr);
-                        
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: xhr.responseJSON?.message || xhr.responseJSON?.error || 'Failed to update status. Please try again.',
-                        });
-                        
-                        submitBtn.prop('disabled', false).html('Change Status');
-                    }
-                });
-            });
-
-            // ========== EVENT HANDLERS ========== //
-            $('#searchName, #searchEmail').on('keyup', function(e) {
-                if (e.key === 'Enter') {
-                    performSearch();
-                }
-            });
-
-            $('#searchRole, #searchStatus').on('change', function() {
-                performSearch();
-            });
-        });
-
-        function getNextCustomerId() {
-            if (!allUsers.length) return 1;
-            const maxId = Math.max(...allUsers.map(u => parseInt(u.customer_id || 0)));
-            return maxId + 1;
-        }
-
-        // ========== AUTHENTICATION CHECK ========== //
-        function checkAuth() {
-            const token = localStorage.getItem('token');
-            const userRole = localStorage.getItem('userRole');
-            
-            console.log('Auth check - Token:', token ? 'Present' : 'Missing');
-            console.log('Auth check - User Role:', userRole);
-            
-            if (!token || !userRole || userRole.toLowerCase() !== 'admin') {
-                console.log('Authentication failed - redirecting to login');
-                window.location.href = '/login.html';
-                return false;
-            }
-            
-            console.log('✅ Authentication successful - Admin access granted');
-            return true;
-        }
-
     </script>
 </body>
 </html>

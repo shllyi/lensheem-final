@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complete Profile</title>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <!-- Bootstrap CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Your custom CSS -->
+  <link rel="stylesheet" href="/css/profile.css" />
+</head>
+<body>
+
+  <!-- Header placeholder -->
+  <div id="header">Loading header...</div>
+
+  <!-- Page Content -->
+  <div class="main-container">
+    <div style="text-align: center; margin-bottom: 15px;">
+      <h2 style="margin-bottom: 5px;"><i class="fas fa-user-edit" style="margin-right: 8px;"></i>Complete Your Profile</h2>
+      <p style="color: #6c757d; margin: 0;">Please fill in your details</p>
+    </div>
+
+    <div style="position: relative; width: 120px; margin: 0 auto 20px;">
+      <img id="profileImagePreview" src="https://via.placeholder.com/120" alt="Profile Picture" 
+           style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: block;">
+      <label for="image" 
+             style="position: absolute; right: 8px; bottom: 8px; background: #ff4500; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
+        <i class="fas fa-camera" style="font-size: 12px;"></i>
+      </label>
+    </div>
+
+    <form id="profileForm" enctype="multipart/form-data" style="margin-top: 10px;">
+      <input type="hidden" name="userId" id="userId" />
+
+      <div style="margin-bottom: 8px;">
+        <select name="title" id="title" style="width: 100%; padding: 12px 14px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 15px; background-color: #f8f9fa;">
+          <option value="" disabled selected>Select title</option>
+          <option value="Mr.">Mr.</option>
+          <option value="Ms.">Ms.</option>
+          <option value="Mrs.">Mrs.</option>
+        </select>
+      </div>
+
+      <div style="display: flex; gap: 15px; margin-bottom: 8px; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 180px;">
+          <input type="text" name="fname" id="fname" placeholder="First name" required 
+                 style="width: 100%; padding: 12px 14px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 15px; background-color: #f8f9fa;">
+        </div>
+        <div style="flex: 1; min-width: 180px;">
+          <input type="text" name="lname" id="lname" placeholder="Last name" required 
+                 style="width: 100%; padding: 12px 14px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 15px; background-color: #f8f9fa;">
+        </div>
+      </div>
+
+      <div style="margin-bottom: 8px;">
+        <input type="text" name="addressline" id="addressline" placeholder="Street address" 
+               style="width: 100%; padding: 12px 14px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 15px; background-color: #f8f9fa;">
+      </div>
+
+      <div style="display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 180px;">
+          <input type="text" name="town" id="town" placeholder="Town/City" 
+                 style="width: 100%; padding: 12px 14px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 15px; background-color: #f8f9fa;">
+        </div>
+        <div style="flex: 1; min-width: 180px;">
+          <input type="tel" name="phone" id="phone" placeholder="Phone number" 
+                 style="width: 100%; padding: 12px 14px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 15px; background-color: #f8f9fa;">
+        </div>
+      </div>
+
+      <div style="display: none;">
+        <input type="file" name="image" id="image" accept="image/*" />
+      </div>
+
+      <button type="submit" style="width: 100%; padding: 12px; border: none; border-radius: 6px; font-size: 15px; font-weight: 500; background-color: #ff4500; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <span>Save Profile</span>
+        <i class="fas fa-fire" style="font-size: 14px;"></i>
+      </button>
+      
+      <p id="profileMsg" style="text-align: center; margin-top: 10px; padding: 10px; border-radius: 6px; font-size: 14px;"></p>
+    </form>
+  </div>
+
+  <!-- Footer placeholder -->
+  <div id="footer">Loading footer...</div>
+
+  <script>
+    $(document).ready(function () {
+      const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('userId');
+
+      
+  $.ajax({
+  url: 'http://localhost:3000/api/auth/admin-check',
+  method: 'GET',
+  headers: {
+    Authorization: 'Bearer ' + (localStorage.getItem('token') || '')
+  },
+  success: function (res) {
+    console.log('✅ Admin verified:', res.user);
+
+    // Load header and render cart
+    $('#header').load('/header_admin.html', function () {
+      renderCart(); // your custom function
+    });
+  },
+  error: function (xhr) {
+    const defaultMsg = "Only admins can access this page.";
+    const message = xhr.responseJSON?.message || defaultMsg;
+
+    alert(message);
+    localStorage.removeItem('token');
+    window.location.href = '/login.html';
+  }
+});
+
+      if (!token || !userId) {
+        alert("You must be logged in first!");
+        window.location.href = '/login.html';
+        return;
+      }
+
+      // Force-load header
+      $('#header').load('/header_admin.html', function (response, status, xhr) {
+        if (status == "error") {
+          console.error("Failed to load header:", xhr.status, xhr.statusText);
+        } else {
+          // FIX: Enable dropdown
+          document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(function (el) {
+            new bootstrap.Dropdown(el);
+          });
+
+          // Adjust header links
+          $('#login-link, #register-link').addClass('d-none');
+          $('#user-dropdown').removeClass('d-none');
+
+          // Set user data in header
+          $.get(`/api/users/customers/${userId}`, function (res) {
+            if (res.success && res.data) {
+              const data = res.data;
+              const fullName = `${data.fname || ''} ${data.lname || ''}`.trim();
+              $('#username').text(fullName || 'USER');
+              if (data.image_path) {
+                $('.profile-img').attr('src', `/${data.image_path}`);
+              }
+            }
+          });
+        }
+      });
+
+      // FORCE CALL the footer
+      $('#footer').load('/footer_admin.html');
+
+      $('#userId').val(userId);
+
+      fetchProfileData(userId);
+
+      function fetchProfileData(userId) {
+        $.ajax({
+          url: `/api/users/customers/${userId}`,
+          method: 'GET',
+          success: function (res) {
+            if (res.success && res.data) {
+              const data = res.data;
+              $('#title').val(data.title || '');
+              $('#fname').val(data.fname || '');
+              $('#lname').val(data.lname || '');
+              $('#addressline').val(data.addressline || '');
+              $('#town').val(data.town || '');
+              $('#phone').val(data.phone || '');
+              if (data.image_path) {
+                $('#profileImagePreview').attr('src', `/${data.image_path}`);
+              }
+            }
+          },
+          error: function () {
+            console.warn('No profile found.');
+          }
+        });
+      }
+
+      $('#image').on('change', function () {
+        const file = this.files[0];
+        if (file) {
+          $('#profileImagePreview').attr('src', URL.createObjectURL(file));
+        }
+      });
+
+      $('#profileForm').on('submit', function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        formData.set('userId', userId);
+
+        $.ajax({
+          url: '/api/users/update-profile',
+          method: 'POST',
+          data: formData,
+          contentType: false,
+          processData: false,
+          success: function () {
+            $('#profileMsg').text(' Profile saved!').css('color', 'green');
+            fetchProfileData(userId);
+             updateHeaderUser(userId)
+
+          },
+          error: function (err) {
+            $('#profileMsg').text(' Failed to save.').css('color', 'red');
+            console.error(err);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

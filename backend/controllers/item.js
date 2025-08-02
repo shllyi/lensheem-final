@@ -158,6 +158,7 @@ const getSingleItem = (req, res) => {
 const createItem = (req, res) => {
   const { item_name, description, cost_price, sell_price, quantity, category_id } = req.body;
   const imageFiles = req.files || [];
+  console.log('imageFiles in createItem:', imageFiles);
   const mainImage = imageFiles.length > 0 ? imageFiles[0].filename : null;
   
   if (!item_name || !description || !cost_price || !sell_price || !quantity || !category_id) {
@@ -200,6 +201,7 @@ const createItem = (req, res) => {
 const updateItem = (req, res) => {
   const itemId = req.params.id;
   const { item_name, description, cost_price, sell_price, quantity, category_id } = req.body;
+  console.log('imageFiles in updateItem:', req.files);
   const imageFiles = req.files || [];
 
   function deleteOldImagesAndProceed(callback) {
@@ -315,13 +317,23 @@ const getAllItemsIncludingDeleted = (req, res) => {
   let limit = parseInt(req.query.limit) || 10;
   let offset = (page - 1) * limit;
 
+  const searchTerm = req.query.search;
+  let whereClause = '';
+  const queryParams = [];
+
+  if (searchTerm) {
+    whereClause = `WHERE i.item_id = ? OR i.item_name LIKE ?`;
+ queryParams.push(searchTerm, `%${searchTerm}%`);
+  }
+
   // Get total count
-  const countSql = `SELECT COUNT(*) as total FROM item`;
-  db.query(countSql, (err, countResult) => {
+  const countSql = `SELECT COUNT(*) as total FROM item i ${whereClause}`;
+  db.query(countSql, queryParams, (err, countResult) => {
     if (err) return res.status(500).json({ error: 'Database error', details: err });
     const total = countResult[0].total;
 
     // Get paginated item IDs first
+    // We need to re-execute the query with pagination and filtering
     const idSql = `SELECT item_id FROM item ORDER BY item_id LIMIT ? OFFSET ?`;
     db.query(idSql, [limit, offset], (err, idRows) => {
       if (err) return res.status(500).json({ error: 'Database error', details: err });
@@ -338,8 +350,9 @@ const getAllItemsIncludingDeleted = (req, res) => {
         LEFT JOIN stock s ON i.item_id = s.item_id
         LEFT JOIN category c ON i.category_id = c.category_id
         LEFT JOIN item_images ii ON i.item_id = ii.item_id
-        WHERE i.item_id IN (?)
+        WHERE i.item_id IN (?) ${searchTerm ? 'AND (' + (idRows.map(() => 'i.item_id = ?').join(' OR ')) + ')' : ''}
         GROUP BY i.item_id
+ ${searchTerm ? 'HAVING ' + (idRows.map(() => 'i.item_id = ?').join(' OR ')) : ''}
         ORDER BY i.item_id
       `;
       db.query(sql, [ids], (err, rows) => {
